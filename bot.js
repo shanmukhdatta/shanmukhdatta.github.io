@@ -1,5 +1,5 @@
 /* Phase 2: Ask Datta bot, command palette, JSON view. Uses globals from script.js (CONTENT, $, svg, IC, isPh, toast, RM, root). */
-const PROXY_URL = "[ADD PROXY URL]"; // e.g. "https://your-project.vercel.app/api/ask"  (no API key ever goes in the front-end)
+const PROXY_URL = "https://shanmukhdatta-github-io.vercel.app/api/ask";
 const MAX_Q = 10, MAX_LEN = 300;
 IC.term = "M4 17l6-6-6-6M12 19h8";
 

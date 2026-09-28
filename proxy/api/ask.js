@@ -45,7 +45,11 @@ module.exports = async (req, res) => {
       body: JSON.stringify({ model: GROQ_MODEL, max_tokens: 300, temperature: 0.3,
         messages: [{ role: "system", content: `${SYSTEM}\n\nDATTA_FACTS:\n${facts}` }, ...history, { role: "user", content: q }] })
     });
-    if (!r.ok) return res.status(502).json({ error: "upstream error" });
+    if (!r.ok) {
+      const errText = await r.text();
+      console.error("Groq upstream error:", r.status, errText);
+      return res.status(502).json({ error: "upstream error", status: r.status, details: errText });
+    }
     const j = await r.json();
     const answer = (j.choices?.[0]?.message?.content || "").trim().split(/(?<=[.!?])\s+/).slice(0, 4).join(" ");
     if (!answer) return res.status(502).json({ error: "empty answer" });
