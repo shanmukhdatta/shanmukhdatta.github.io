@@ -17,8 +17,19 @@ module.exports = async (req, res) => {
     res.setHeader("Access-Control-Allow-Origin", origin); res.setHeader("Vary", "Origin");
     res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS"); res.setHeader("Access-Control-Allow-Headers", "Content-Type");
   }
-  if (req.method === "OPTIONS") return res.status(allowed ? 204 : 403).end();
-  if (!allowed) return res.status(403).json({ error: "origin not allowed" });
+  if (req.method === "GET") {
+    const key = process.env.GROQ_API_KEY;
+    if (!key) return res.status(500).json({ error: "GROQ_API_KEY is not set" });
+    try {
+      const mr = await fetch("https://api.groq.com/openai/v1/models", {
+        headers: { Authorization: `Bearer ${key}` }
+      });
+      const mj = await mr.json();
+      return res.status(mr.status).json(mj);
+    } catch (e) {
+      return res.status(502).json({ error: e.message });
+    }
+  }
   if (req.method !== "POST") return res.status(405).json({ error: "POST only" });
 
   const key = process.env.GROQ_API_KEY;
