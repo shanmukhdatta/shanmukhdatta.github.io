@@ -1,6 +1,6 @@
 // Vercel serverless function: POST /api/ask -> { answer }
 // The Groq key is read from the GROQ_API_KEY environment variable. Never write it in this file.
-const GROQ_MODEL = "[CHOOSE A CURRENT GROQ LLAMA MODEL]"; // pick one from https://console.groq.com/docs/models
+const GROQ_MODEL = process.env.GROQ_MODEL || "llama-3.3-70b-versatile"; // https://console.groq.com/docs/models
 const ALLOWED_ORIGINS = ["https://shanmukhdatta.github.io", "http://localhost:8000", "http://127.0.0.1:8000"];
 const LIMIT = 20, WINDOW_MS = 10 * 60 * 1000; // per IP, per warm serverless instance
 const SYSTEM = "You are the assistant on Datta's portfolio. Answer in a friendly, concise way (max 4 sentences) using ONLY the facts in DATTA_FACTS. If the answer is not in the facts, say you don't know and suggest emailing him. Never invent projects, papers, employers, awards or numbers. Never call unpublished work published.";
@@ -24,7 +24,7 @@ module.exports = async (req, res) => {
 
   const key = process.env.GROQ_API_KEY;
   if (!key) return res.status(500).json({ error: "GROQ_API_KEY is not set" });
-  if (GROQ_MODEL.startsWith("[")) return res.status(500).json({ error: "GROQ_MODEL is not set" });
+  if (!GROQ_MODEL) return res.status(500).json({ error: "GROQ_MODEL is not set" });
   const ip = (req.headers["x-forwarded-for"] || "").split(",")[0].trim() || "unknown";
   if (limited(ip)) return res.status(429).json({ error: "rate limited" });
 
