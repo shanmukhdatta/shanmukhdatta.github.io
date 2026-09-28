@@ -1,5 +1,5 @@
 // Vercel serverless function: POST /api/ask -> { answer }
-const GROQ_MODEL = process.env.GROQ_MODEL || "llama-3.1-8b-instant"; // https://console.groq.com/docs/models
+const GROQ_MODEL = process.env.GROQ_MODEL || "openai/gpt-oss-20b"; // Available: openai/gpt-oss-20b, openai/gpt-oss-120b, qwen/qwen3.8-27b
 const ALLOWED_ORIGINS = ["https://shanmukhdatta.github.io", "http://localhost:8000", "http://127.0.0.1:8000"];
 const LIMIT = 20, WINDOW_MS = 10 * 60 * 1000; // per IP, per warm serverless instance
 const SYSTEM = "You are the assistant on Datta's portfolio. Answer in a friendly, concise way (max 4 sentences) using ONLY the facts in DATTA_FACTS. If the answer is not in the facts, say you don't know and suggest emailing him. Never invent projects, papers, employers, awards or numbers. Never call unpublished work published.";
