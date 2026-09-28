@@ -17,13 +17,8 @@ module.exports = async (req, res) => {
     res.setHeader("Access-Control-Allow-Origin", origin); res.setHeader("Vary", "Origin");
     res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS"); res.setHeader("Access-Control-Allow-Headers", "Content-Type");
   }
-  if (req.method === "GET") {
-    return res.status(200).json({
-      activeModel: GROQ_MODEL,
-      envModel: process.env.GROQ_MODEL || null,
-      commit: "ef194f4"
-    });
-  }
+  if (req.method === "OPTIONS") return res.status(allowed ? 204 : 403).end();
+  if (!allowed) return res.status(403).json({ error: "origin not allowed" });
   if (req.method !== "POST") return res.status(405).json({ error: "POST only" });
 
   const key = process.env.GROQ_API_KEY;
