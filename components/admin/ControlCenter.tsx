@@ -211,9 +211,57 @@ function DraftPreview({ tab, value }: { tab: DocKey; value: unknown }) {
               </div>
             </div>
           ))}
-        {['articles', 'research', 'knowledge', 'skillLinks', 'register', 'seo', 'intro'].includes(
-          tab,
-        ) && <pre className="structured-preview">{JSON.stringify(value, null, 2)}</pre>}
+        {['articles', 'research', 'knowledge', 'skillLinks', 'register'].includes(tab) &&
+          Array.isArray(value) &&
+          value.map((item, i) => {
+            const r = item as Record<string, unknown>;
+            return (
+              <article className="preview-record" key={i}>
+                <span>
+                  {short(r.status) || short(r.state) || short(r.visibility)}{' '}
+                  {r.demo ? ' · DEMO' : ''}
+                </span>
+                <h4>{short(r.title) || short(r.question) || short(r.skill) || short(r.id)}</h4>
+                <p>
+                  {short(r.summary) || short(r.abstract) || short(r.answer) || short(r.evidence)}
+                </p>
+                {tab === 'articles' &&
+                  short(r.body)
+                    .split('\n\n')
+                    .map((p, j) => <p key={j}>{p}</p>)}
+                {tab === 'research' && (
+                  <>
+                    <h5>Method</h5>
+                    <p>{short(r.method)}</p>
+                    <h5>Evidence & limitations</h5>
+                    <p>{short(r.limitations)}</p>
+                    <p>{short(r.publication)}</p>
+                  </>
+                )}
+              </article>
+            );
+          })}
+        {tab === 'seo' && (
+          <article className="preview-record">
+            <small>Search and social preview</small>
+            <h3>{short(x.title)}</h3>
+            <p>{short(x.description)}</p>
+            <p>{Array.isArray(x.redirects) ? x.redirects.length : 0} local redirects</p>
+          </article>
+        )}
+        {tab === 'intro' && (
+          <article className="preview-record">
+            <small>
+              {String(x.durationMs)} ms · {x.enabled ? 'Enabled' : 'Disabled'}
+            </small>
+            <h3>
+              {short(x.firstLine)}
+              <br />
+              {short(x.secondLine)}
+            </h3>
+            <p>{Array.isArray(x.greetings) ? x.greetings.join(' · ') : ''}</p>
+          </article>
+        )}
       </div>
       <details>
         <summary>Inspect full draft data</summary>

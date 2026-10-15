@@ -7,8 +7,13 @@ export const metadata: Metadata = {
 };
 export const dynamic = 'force-dynamic';
 export default async function ResearchIndex() {
-  const { projects } = await liveData();
-  const research = projects.filter((x) => x.research);
+  const { projects, research: records } = await liveData();
+  const research = records.map((r) => ({
+    ...r,
+    name: r.title,
+    summary: r.abstract,
+    stage: projects.find((p) => p.slug === r.project)?.stage || 'Research',
+  }));
   return (
     <main id="content" className="archive-page">
       <nav className="archive-top">
