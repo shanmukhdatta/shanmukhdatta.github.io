@@ -3,6 +3,7 @@ import AxeBuilder from '@axe-core/playwright';
 test.beforeEach(async ({ page }) => {
   await page.route('https://fonts.googleapis.com/**', (route) => route.abort());
   await page.goto('/');
+  await expect(page.locator('.portfolio')).toHaveAttribute('data-ready', 'true');
 });
 test('Quick/Explore, mobile navigation, road and semantic board', async ({ page }, info) => {
   await expect(page.getByRole('heading', { level: 1 })).toContainText('SHANMUKH');
@@ -123,4 +124,18 @@ test('every project case study stays within the viewport', async ({ page }) => {
       p.slug + ' overflow',
     ).toBe(true);
   }
+});
+
+test('Explore and light theme retain accessible controls and contrast', async ({ page }, info) => {
+  await page.getByRole('button', { name: 'Explore', exact: true }).click();
+  const explore = await new AxeBuilder({ page })
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
+    .analyze();
+  expect(explore.violations).toEqual([]);
+  await page.getByRole('button', { name: 'Toggle theme' }).click();
+  const light = await new AxeBuilder({ page })
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
+    .analyze();
+  expect(light.violations).toEqual([]);
+  await page.screenshot({ path: `test-results/${info.project.name}-light.png`, fullPage: true });
 });

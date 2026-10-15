@@ -118,6 +118,8 @@ function scrollTo(id: string) {
 
 export function Portfolio({ initialData }: { initialData: PublicData }) {
   const [data, setData] = useState(initialData);
+  const [ready, setReady] = useState(false);
+  useEffect(() => setReady(true), []);
   const {
     site,
     milestones,
@@ -509,7 +511,7 @@ export function Portfolio({ initialData }: { initialData: PublicData }) {
     setTerminalInput('');
   }
   return (
-    <div className="portfolio" data-mode={mode}>
+    <div className="portfolio" data-mode={mode} data-ready={ready}>
       {intro && (
         <div
           ref={introDialog}

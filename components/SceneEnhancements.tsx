@@ -194,11 +194,23 @@ export function RoadScene() {
   }, []);
   const [scooter, setScooter] = useState({ x: 50, y: 15 });
   useEffect(() => {
-    const path = document.querySelector<SVGPathElement>('.road-asphalt');
-    if (path?.getPointAtLength) {
+    const position = () => {
+      const path = document.querySelector<SVGPathElement>('.road-asphalt');
+      if (!path?.getPointAtLength) return;
       const p = path.getPointAtLength(path.getTotalLength() * (0.1 + progress * 0.8));
-      setScooter({ x: p.x / 10, y: p.y / 12 });
-    }
+      const matrix = path.getScreenCTM?.();
+      const container = path.closest('.journey-landscape')?.getBoundingClientRect();
+      if (matrix && container?.width && container.height) {
+        const point = new DOMPoint(p.x, p.y).matrixTransform(matrix);
+        setScooter({
+          x: ((point.x - container.left) / container.width) * 100,
+          y: ((point.y - container.top) / container.height) * 100,
+        });
+      } else setScooter({ x: p.x / 10, y: p.y / 12 });
+    };
+    position();
+    window.addEventListener('resize', position);
+    return () => window.removeEventListener('resize', position);
   }, [progress]);
   return (
     <div

@@ -4254,7 +4254,7 @@ button:disabled {
 .menu-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 95;
+  z-index: 85;
   background: #0009;
   border: 0;
   cursor: default;
@@ -4619,4 +4619,11 @@ button:disabled {
 .feature-dots button.current:after {
   width: 18px;
   background: var(--accent);
+}
+:root[data-theme="light"][data-signal="off"] {
+  --accent: #34383d;
+  --accent-soft: rgba(0, 0, 0, 0.07);
+}
+.site-footer h2 em {
+  color: #ffb224;
 }
