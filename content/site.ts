@@ -18,6 +18,11 @@ export const site = {
   },
   availability: 'Open to research collaborations and engineering opportunities',
   quote: 'Stop Thinking. Start Doing.',
+  aboutTitle: 'Curious by default. Practical by design.',
+  aboutIntro: 'I am an undergraduate researcher and builder studying at NIT Jalandhar. I spend my time turning questions into experiments and experiments into usable systems.',
+  aboutDetail: 'My work moves between multilingual AI, security, health computer vision, autonomous agents and developer infrastructure. Different domains, one approach: be curious, measure carefully, and make the result useful.',
+  currentlyExploring: 'Reliable evaluation · Agent systems · AI products',
+  signalAccent: true, 
   gallery: [] as {src:string;title:string;place:string;year?:string}[],
 };
 
