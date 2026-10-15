@@ -1,0 +1,23 @@
+/** Public GitHub directory snapshot from 2026-10-15. These are repository links, not claims of authorship, originality, or successful deployment. */
+export const publicRepoGroups: { title: string; repos: string[] }[] = [
+  {title: 'Research, security & model engineering', repos: [
+    'Qintern26','dravidian-cultural-alignment','Facial_Skin_Diesease','DermaAI-Facial-disease-prediction','DermaLens-AI','No-Hack-','CLARION','Soochana-AI','space-anomaly-detection','Network-Security','business-entity-resolution','bhashaguard-edge'
+  ]},
+  {title: 'Agents, personal assistants & infrastructure', repos: [
+    'Chrono-Mind-AI','Life-Sync-AI','Resume-Copilot','workspace-mcp','kaggle-gpu-mcp','ShanX-Bot','Nuera-Chat','NeuraPlan-AI','VoiceDoc','MediCare-AI','MedTech','Simple-Chatbot','SafeWorker-AI','Shanx-AI-Extract'
+  ]},
+  {title: 'Applied products & interactive prototypes', repos: [
+    'Aurbana','SENTRY','EAPCET-Predictor','GestureVerse','carbonwise-ai','ecosangam_trae','-ElectIQ-AI','fifa-smart-stadium-copilot'
+  ]},
+  {title: 'Open source, campus & internships', repos: [
+    'CodeGraphContext','India-Space-Lab','flyrank-ai-ml','flyrank-ml-internship-starter','nitj-shanmukhdatta-hackthon','agentic-honey-pot','whispers_of_the_wires'
+  ]},
+  {title: 'Learning labs & reference material', repos: [
+    'ANN-CLASSIFICATION-PROJECT','vibe-forge-gui','Next-Word-Prediction-Using-LSTM','Natural-Macine-Translation-Eng-Hin-Using-Attention-Encoder-Decoder','NLP-Deep-Learning-Research','Simple-GenAI-App-using-Langchain-Gemma','Q-A-Chatbot-with-Ollama-and-OpenAI-API','RAG-Document-Q-A-with-Groq-and-Lama3','RAG-Q-A-Conversation-With-PDF-Including-Chat-History','Simple-Linear-Regression---Height-n-Weight','Multiple-Linear-Regression','Numpy','House-Rent-Prediction','ML-End-To-End','Calories-Brunt-Prediction---ML','Student-Perfomance-prediction-ML','Fear-Free-Python-App','Bank_Churn_prediction','Quantumn-Computing-Resources','DSA','GATE_DA','core36-tracker','Coding-Interview-Questions','awesome-llm-apps','edgeai','neetcode-submissions','Complete-Python-Bootcamp'
+  ]},
+  {title: 'Previous portfolio & developer identity', repos: [
+    'html-protifolio','shanmukhdatta','shanmukhdatta.github.io'
+  ]},
+];
+
+export const publicRepoCount = publicRepoGroups.reduce((total, group) => total + group.repos.length, 0);
