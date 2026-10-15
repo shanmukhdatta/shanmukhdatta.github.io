@@ -1,29 +1,12 @@
-name: Deploy shanXAI to GitHub Pages
+# The v2 application uses dynamic server routes and cannot deploy to GitHub Pages.
+# Keep this workflow disabled until a static-only compatibility build is introduced.
+name: Legacy GitHub Pages (disabled for dynamic v2)
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 permissions:
   contents: read
-  pages: write
-  id-token: write
-concurrency:
-  group: github-pages
-  cancel-in-progress: true
 jobs:
-  build:
+  notice:
     runs-on: ubuntu-latest
-    environment: github-pages
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-      - run: npm install --no-audit --no-fund
-      - run: npm run check:content
-      - run: npm run typecheck
-      - run: npm run build
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./out
-      - uses: actions/deploy-pages@v4
+      - run: echo "shanXAI V2 requires Vercel/Node hosting for the secure CMS and email API."

@@ -16,6 +16,12 @@ export interface Project {
   demo?: string;
   related?: string[];
   featured?: boolean;
+  features?: string[];
+  screenshots?: string[];
+  metrics?: {label:string; value:string; source?:string}[];
+  role?: string;
+  year?: string;
+  paper?: string;
   research?: boolean;
 }
 const repo = (path: string) => `https://github.com/shanmukhdatta/${path}`;

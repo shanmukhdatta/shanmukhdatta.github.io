@@ -18,6 +18,7 @@ export const site = {
   },
   availability: 'Open to research collaborations and engineering opportunities',
   quote: 'Stop Thinking. Start Doing.',
+  gallery: [] as {src:string;title:string;place:string;year?:string}[],
 };
 
 export const milestones = [

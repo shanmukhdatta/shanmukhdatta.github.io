@@ -3,7 +3,7 @@ import './globals.css';
 import { site } from '../content/site';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://shanmukhdatta.github.io'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://shanmukhdatta.github.io'),
   title: { default: `${site.shortName} — AI Research & Engineering`, template: `%s | ${site.shortName}` },
   description: site.description,
   applicationName: 'shanXAI',

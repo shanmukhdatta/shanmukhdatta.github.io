@@ -1,13 +1,16 @@
 'use client';
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ArrowUpRight, Search, Layers3, ExternalLink } from 'lucide-react';
-import { projects } from '../content/projects';
+import { projects as seedProjects, type Project } from '../content/projects';
 import { publicRepoCount, publicRepoGroups } from '../content/catalog';
 
 const tabs=['All','Research','AI Products','Agents & Infrastructure','Cybersecurity','Healthcare','Applied Engineering','Explorations'];
 export function ArchivePage() {
- const [query,setQuery]=useState('');const [track,setTrack]=useState('All');const [showRepos,setShowRepos]=useState(false);
+ const [projects,setProjects]=useState<Project[]>(seedProjects);
+ useEffect(()=>{fetch('/api/content').then(r=>r.ok?r.json():null).then(data=>{if(Array.isArray(data?.projects))setProjects(data.projects)}).catch(()=>{});},[]);
+ const [query,setQuery]=useState('');
+ useEffect(()=>{setQuery(new URLSearchParams(window.location.search).get('q')||'')},[]);const [track,setTrack]=useState('All');const [showRepos,setShowRepos]=useState(false);
  const filtered=useMemo(()=>projects.filter(p=>(track==='All'||p.category===track)&&[p.name,p.summary,p.eyebrow,p.tags.join(' '),p.category].join(' ').toLowerCase().includes(query.trim().toLowerCase())),[query,track]);
  const matchedRepos=publicRepoGroups.map(g=>({...g,repos:g.repos.filter(r=>r.toLowerCase().includes(query.trim().toLowerCase()))})).filter(g=>g.repos.length);
  return <main id="content" className="archive-page"><nav className="archive-top"><Link href="/" className="wordmark">shan<span>X</span>AI</Link><Link href="/">← Back to home</Link></nav>
