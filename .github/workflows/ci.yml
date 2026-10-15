@@ -1,7 +1,7 @@
 name: shanXAI V2 CI
 on:
   push:
-    branches: ["redesign/**"]
+    branches: ["redesign/**", main]
   pull_request:
     branches: [main]
 permissions:
