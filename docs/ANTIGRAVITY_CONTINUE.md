@@ -6,6 +6,32 @@ Act as my lead full-stack engineer, interaction designer and QA engineer. Comple
 
 I will supply service credentials locally. Use them only through ignored `.env.local`; never put credentials, login codes, private messages or session cookies in Git, screenshots, reports, browser bundles or chat output. Ask me only for a required missing configuration or an actual design decision; continue independent work while waiting.
 
+## 0. First action: clone the correct repository and branch
+
+Antigravity: execute these commands yourself in my chosen local workspace. Clone the repository before reading files or testing. Use a new `shanxai-antigravity` folder if it does not already exist:
+
+```powershell
+git clone --single-branch --branch redesign/shanxai-portfolio-v2 https://github.com/shanmukhdatta/shanmukhdatta.github.io.git shanxai-antigravity
+cd shanxai-antigravity
+git remote get-url origin
+git branch --show-current
+git rev-parse HEAD
+git status --short
+```
+
+Confirm origin is the repository above and the active branch is `redesign/shanxai-portfolio-v2`. Work from the newest remote branch tip, not an old ZIP or main. The implementation baseline `f7f4de70a7a3ac5b9fc6d71cb13936bd4afadb41` passed GitHub CI, including 16 desktop/mobile browser tests. Newer handoff-only commits may follow it. Record the actual cloned SHA and inspect CI for that SHA rather than assuming baseline results prove future changes.
+
+If the folder already exists, inspect its remote, branch and `git status --short` first. In a clean checkout of this repository:
+
+```powershell
+git fetch origin
+git switch redesign/shanxai-portfolio-v2
+git pull --ff-only origin redesign/shanxai-portfolio-v2
+git rev-parse HEAD
+```
+
+Do not reset, delete, overwrite or automatically stash someone’s local work. If the existing folder is dirty or belongs to a different repository, leave it intact and clone into a new unused folder. After cloning, continue all steps below; do not stop after installation.
+
 ## 1. Read the source of truth
 
 Read `README.md`, `docs/PLAN_AUDIT.md`, `docs/REDESIGN_PLAN.md`, `docs/IMPLEMENTATION_MATRIX.md`, `docs/LAUNCH_RUNBOOK.md`, `.env.example`, `db/schema.sql`, `package.json`, `playwright.config.ts`, and the affected application code. The newest PLAN_AUDIT supersedes old foundation-only status paragraphs. Treat code presence, automated verification, live integration and visual acceptance as separate statuses. Eight deeper specifications referenced in the original material were not supplied: do not invent their contents.
@@ -29,11 +55,9 @@ Review the rendered result section by section. Fix spacing, hierarchy, typograph
 
 ## 3. Install and run credential-free checks first
 
-Use Node.js 22 and the committed lockfile. In a fresh checkout:
+Use Node.js 22 and the committed lockfile. Run these from the repository folder cloned in step 0:
 
 ```powershell
-git clone --branch redesign/shanxai-portfolio-v2 https://github.com/shanmukhdatta/shanmukhdatta.github.io.git
-cd shanmukhdatta.github.io
 npm ci
 npm run check
 npx playwright install chromium
