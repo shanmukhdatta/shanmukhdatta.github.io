@@ -1,18 +1,43 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { site } from '../content/site';
-import {RouteTransition} from '../components/RouteTransition';
+import { liveData } from '../lib/portfolio-store';
+import { RouteTransition } from '../components/RouteTransition';
 
-export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://shanmukhdatta.github.io'),
-  title: { default: `${site.shortName} — AI Research & Engineering`, template: `%s | ${site.shortName}` },
-  description: site.description,
-  applicationName: 'shanXAI',
-  keywords: ['AI research','machine learning','MCP','multilingual AI','quantum machine learning','portfolio'],
-  openGraph: { title: `${site.shortName} — AI Research & Engineering`, description: site.description, url:'https://shanmukhdatta.github.io', type:'website' },
-  robots: { index:true, follow:true },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { site, seo } = await liveData();
+  const base = process.env.NEXT_PUBLIC_SITE_URL || 'https://shanmukhdatta.github.io';
+  return {
+    metadataBase: new URL(base),
+    title: { default: seo.title, template: `%s | ${site.shortName}` },
+    description: seo.description,
+    applicationName: site.brand,
+    openGraph: {
+      title: seo.title,
+      description: seo.description,
+      url: base,
+      type: 'website',
+      images: [seo.image],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: seo.title,
+      description: seo.description,
+      images: [seo.image],
+    },
+    robots: { index: true, follow: true },
+  };
+}
 
-export default function RootLayout({children}: Readonly<{children: React.ReactNode}>) {
-  return <html lang="en" suppressHydrationWarning><body><a className="skip-link" href="#content">Skip to content</a><RouteTransition/>{children}</body></html>;
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body>
+        <a className="skip-link" href="#content">
+          Skip to content
+        </a>
+        <RouteTransition />
+        {children}
+      </body>
+    </html>
+  );
 }

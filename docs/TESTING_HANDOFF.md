@@ -61,3 +61,9 @@ Read `docs/PLAN_AUDIT.md` before treating the project as fully complete. It list
 - `npm run test:database` applies the actual SQL in an embedded PostgreSQL engine; no Supabase credentials are used.
 - Apply the updated `db/schema.sql` to enable private revision history and backup export.
 - `docs/link-audit.json` records outbound link reachability. One demo endpoint timed out; HTTP 200 alone does not validate the target application's behavior.
+
+## Remaining-feature completion pass
+
+New source includes Writing/Article and research detail routes; editable SEO/OpenGraph/local redirects, Intro and published Maya knowledge; skill proof/status records; semantic chalkboard edges; winding road/scooter path; visual carousel neighbors; permanent resume/writing links; long-press owner discovery; expanded wizard with mandatory review; private 76-slot editorial registry; and architecture text downloads.
+
+`npm run lint` and `npm run format:check` are enforced. `npm run test:e2e` is run on a GitHub runner after installing Chromium. It captures desktop/mobile Explore screenshots, exercises critical public/demonstration flows, runs axe WCAG checks, and enforces responsive bounds, initial JavaScript transfer and DOM-readiness budgets. The final browser artifact is linked from the workflow run. Actual phone hardware, paper/role evidence, provider accounts and launch remain owner release checks.

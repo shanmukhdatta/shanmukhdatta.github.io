@@ -1,19 +1,192 @@
-import type {Metadata} from 'next';
+import type { Metadata } from 'next';
 import Link from 'next/link';
-import {notFound} from 'next/navigation';
-import {ProjectVisual} from '../../../components/ProjectVisual';
-import {projectBySlug,liveData} from '../../../lib/portfolio-store';
+import { notFound } from 'next/navigation';
+import { ProjectVisual } from '../../../components/ProjectVisual';
+import { projectBySlug, liveData } from '../../../lib/portfolio-store';
 // CMS-published edits and brand-new slugs must be visible immediately without rebuilding.
-export const dynamic='force-dynamic';
-export const dynamicParams=true;
-export async function generateMetadata({params}:{params:Promise<{slug:string}>}):Promise<Metadata>{const {slug}=await params;const p=await projectBySlug(slug);return p?{title:p.name,description:p.summary}:{title:'Project not found'};}
-export default async function ProjectCase({params}:{params:Promise<{slug:string}>}){
- const {slug}=await params;const data=await liveData();const p=data.projects.find(x=>x.slug===slug);if(!p)notFound();
- const sibling=(p.related||[]).map(k=>data.projects.find(x=>x.slug===k)).filter(x=>Boolean(x));
- return <main id="content" className="case-page"><div className="case-shell"><nav className="case-top" aria-label="Breadcrumb"><Link href="/" className="wordmark">shan<span>X</span>AI</Link><Link href="/projects/">← All projects</Link></nav>
- <div className="case-hero"><div><p className="eyebrow">{p.eyebrow}</p><div className="pill-row"><span className="pill amber">{p.stage}</span><span className="pill">{p.category}</span></div><h1>{p.name}</h1><p className="case-lead">{p.summary}</p><div className="pill-row">{p.tags.map(t=><span className="pill" key={t}>{t}</span>)}</div><div className="case-actions">{p.repo&&<a href={p.repo} target="_blank" rel="noopener noreferrer" className="btn btn-primary">View source ↗</a>}{p.demo&&<a href={p.demo} target="_blank" rel="noopener noreferrer" className="btn">Open demo ↗</a>}{p.paper&&<a href={p.paper} target="_blank" rel="noopener noreferrer" className="btn">Read paper ↗</a>}</div></div><ProjectVisual project={p}/></div>
- {p.metrics?.length? <div className="metrics-ribbon">{p.metrics.map(m=><div key={m.label}><span>{m.label}</span><strong>{m.value}</strong>{m.source&&<small>{m.source}</small>}</div>)}</div>:null}
- <div className="case-grid"><article className="case-main"><section><p className="eyebrow">01 / THE PROBLEM</p><h2>Why this exists</h2><p>{p.problem}</p></section><section><p className="eyebrow">02 / MY ROLE</p><h2>How I contributed</h2><p>{p.role||'Research, prototyping and engineering work. Detailed attribution is available in the linked project repository where supplied.'}</p></section><section><p className="eyebrow">03 / THE APPROACH</p><h2>Architecture & decisions</h2><p>{p.approach}</p></section>{p.features?.length?<section><p className="eyebrow">04 / IMPLEMENTATION</p><h2>Features & technical scope</h2><ul>{p.features.map(x=><li key={x}>{x}</li>)}</ul></section>:null}<section><p className="eyebrow">05 / WHAT IS VERIFIED</p><h2>Evidence & limitations</h2><p>{p.evidence}</p></section>{p.screenshots?.length?<section><p className="eyebrow">06 / MEDIA</p><h2>Project screenshots</h2><div className="case-screens">{p.screenshots.map((src,i)=><img src={src} alt={`${p.name} screenshot ${i+1}`} key={src} loading="lazy"/>)}</div></section>:null}<section><p className="eyebrow">07 / THE NEXT VERSION</p><h2>Roadmap</h2><p>{p.next}</p></section></article><aside className="case-aside"><span className="eyebrow">PROJECT RECORD</span><dl><dt>Current stage</dt><dd>{p.stage}</dd><dt>Track</dt><dd>{p.category}</dd><dt>Evidence</dt><dd>{p.repo?'Public repository':'No public repository linked'}</dd>{p.year&&<><dt>Year</dt><dd>{p.year}</dd></>}</dl><p className="small-note">Descriptions distinguish shipped code, experimental work, proposals and unverified integrations.</p></aside></div>
- {sibling.length>0&&<section className="related"><p className="eyebrow">CONNECTED IDEAS</p><h2>Related work</h2><div className="related-grid">{sibling.map(s=><Link className="related-link" href={`/projects/${s!.slug}/`} key={s!.slug}><span>{s!.category}</span><strong>{s!.name}</strong><span>Explore ↗</span></Link>)}</div></section>}
- <footer className="case-footer"><Link href="/projects/">← Project library</Link><Link href="/">Back home ↑</Link></footer></div></main>;
+export const dynamic = 'force-dynamic';
+export const dynamicParams = true;
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const p = await projectBySlug(slug);
+  return p ? { title: p.name, description: p.summary } : { title: 'Project not found' };
+}
+export default async function ProjectCase({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const data = await liveData();
+  const p = data.projects.find((x) => x.slug === slug);
+  if (!p) notFound();
+  const sibling = (p.related || [])
+    .map((k) => data.projects.find((x) => x.slug === k))
+    .filter((x) => Boolean(x));
+  return (
+    <main id="content" className="case-page">
+      <div className="case-shell">
+        <nav className="case-top" aria-label="Breadcrumb">
+          <Link href="/" className="wordmark">
+            shan<span>X</span>AI
+          </Link>
+          <Link href="/projects/">← All projects</Link>
+        </nav>
+        <div className="case-hero">
+          <div>
+            <p className="eyebrow">{p.eyebrow}</p>
+            <div className="pill-row">
+              <span className="pill amber">{p.stage}</span>
+              <span className="pill">{p.category}</span>
+            </div>
+            <h1>{p.name}</h1>
+            <p className="case-lead">{p.summary}</p>
+            <div className="pill-row">
+              {p.tags.map((t) => (
+                <span className="pill" key={t}>
+                  {t}
+                </span>
+              ))}
+            </div>
+            <div className="case-actions">
+              <a className="btn" href={`/api/projects/${p.slug}/diagram/`}>
+                Download architecture text ↓
+              </a>
+              {data.research.some((r) => r.project === p.slug) && (
+                <Link className="btn" href={`/research/${p.slug}/`}>
+                  Research record ↗
+                </Link>
+              )}
+              {p.repo && (
+                <a
+                  href={p.repo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-primary"
+                >
+                  View source ↗
+                </a>
+              )}
+              {p.demo && (
+                <a href={p.demo} target="_blank" rel="noopener noreferrer" className="btn">
+                  Open demo ↗
+                </a>
+              )}
+              {p.paper && (
+                <a href={p.paper} target="_blank" rel="noopener noreferrer" className="btn">
+                  Read paper ↗
+                </a>
+              )}
+            </div>
+          </div>
+          <ProjectVisual project={p} />
+        </div>
+        {p.metrics?.length ? (
+          <div className="metrics-ribbon">
+            {p.metrics.map((m) => (
+              <div key={m.label}>
+                <span>{m.label}</span>
+                <strong>{m.value}</strong>
+                {m.source && <small>{m.source}</small>}
+              </div>
+            ))}
+          </div>
+        ) : null}
+        <div className="case-grid">
+          <article className="case-main">
+            <section>
+              <p className="eyebrow">01 / THE PROBLEM</p>
+              <h2>Why this exists</h2>
+              <p>{p.problem}</p>
+            </section>
+            <section>
+              <p className="eyebrow">02 / MY ROLE</p>
+              <h2>How I contributed</h2>
+              <p>
+                {p.role ||
+                  'Research, prototyping and engineering work. Detailed attribution is available in the linked project repository where supplied.'}
+              </p>
+            </section>
+            <section>
+              <p className="eyebrow">03 / THE APPROACH</p>
+              <h2>Architecture & decisions</h2>
+              <p>{p.approach}</p>
+            </section>
+            {p.features?.length ? (
+              <section>
+                <p className="eyebrow">04 / IMPLEMENTATION</p>
+                <h2>Features & technical scope</h2>
+                <ul>
+                  {p.features.map((x) => (
+                    <li key={x}>{x}</li>
+                  ))}
+                </ul>
+              </section>
+            ) : null}
+            <section>
+              <p className="eyebrow">05 / WHAT IS VERIFIED</p>
+              <h2>Evidence & limitations</h2>
+              <p>{p.evidence}</p>
+            </section>
+            {p.screenshots?.length ? (
+              <section>
+                <p className="eyebrow">06 / MEDIA</p>
+                <h2>Project screenshots</h2>
+                <div className="case-screens">
+                  {p.screenshots.map((src, i) => (
+                    <img src={src} alt={`${p.name} screenshot ${i + 1}`} key={src} loading="lazy" />
+                  ))}
+                </div>
+              </section>
+            ) : null}
+            <section>
+              <p className="eyebrow">07 / THE NEXT VERSION</p>
+              <h2>Roadmap</h2>
+              <p>{p.next}</p>
+            </section>
+          </article>
+          <aside className="case-aside">
+            <span className="eyebrow">PROJECT RECORD</span>
+            <dl>
+              <dt>Current stage</dt>
+              <dd>{p.stage}</dd>
+              <dt>Track</dt>
+              <dd>{p.category}</dd>
+              <dt>Evidence</dt>
+              <dd>{p.repo ? 'Public repository' : 'No public repository linked'}</dd>
+              {p.year && (
+                <>
+                  <dt>Year</dt>
+                  <dd>{p.year}</dd>
+                </>
+              )}
+            </dl>
+            <p className="small-note">
+              Descriptions distinguish shipped code, experimental work, proposals and unverified
+              integrations.
+            </p>
+          </aside>
+        </div>
+        {sibling.length > 0 && (
+          <section className="related">
+            <p className="eyebrow">CONNECTED IDEAS</p>
+            <h2>Related work</h2>
+            <div className="related-grid">
+              {sibling.map((s) => (
+                <Link className="related-link" href={`/projects/${s!.slug}/`} key={s!.slug}>
+                  <span>{s!.category}</span>
+                  <strong>{s!.name}</strong>
+                  <span>Explore ↗</span>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+        <footer className="case-footer">
+          <Link href="/projects/">← Project library</Link>
+          <Link href="/">Back home ↑</Link>
+        </footer>
+      </div>
+    </main>
+  );
 }

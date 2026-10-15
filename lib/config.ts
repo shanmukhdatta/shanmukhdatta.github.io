@@ -10,4 +10,6 @@ export const config = {
   groq: process.env.GROQ_API_KEY || '',
   groqModel: process.env.GROQ_MODEL || 'openai/gpt-oss-20b',
 };
-export function backendReady(){return Boolean(config.supabaseUrl && config.serviceRole && config.secret && config.email);}
+export function backendReady() {
+  return Boolean(config.supabaseUrl && config.serviceRole && config.secret && config.email);
+}

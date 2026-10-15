@@ -96,3 +96,7 @@ end $$;
 revoke all on function public.record_portfolio_revision() from public,anon,authenticated;
 drop trigger if exists portfolio_revision_history on public.portfolio_documents;
 create trigger portfolio_revision_history after insert or update on public.portfolio_documents for each row execute function public.record_portfolio_revision();
+
+-- Extend editable documents while keeping the editorial register out of public feeds.
+alter table public.portfolio_documents drop constraint if exists portfolio_documents_key_check;
+alter table public.portfolio_documents add constraint portfolio_documents_key_check check(key in ('site','milestones','mindTopics','skills','projects','articles','research','seo','knowledge','intro','skillLinks','register'));

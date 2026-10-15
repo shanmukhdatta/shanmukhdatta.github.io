@@ -55,3 +55,7 @@ No live Supabase/Resend/Groq credentials, personal gallery images or resume were
 ## Superseding detailed audit
 
 `docs/PLAN_AUDIT.md` is the current detailed comparison against the master plan. Earlier broad “implemented” rows in this checklist describe core code presence and must not be read as 100% design compliance. The audit records remaining Writing/CMS/research/visual/performance gaps and verification limits. Five demo photos, a clearly labeled sample resume, a `/demo/` sandbox and private history/backup code are now included.
+
+## Remaining-feature implementation completed
+
+See the rewritten `PLAN_AUDIT.md` for the completed code map and external release gates. Writing/research/CMS managers, semantic scenes, redirects/metadata, citations, wizard review, private registry, diagram downloads and browser budget checks are now implemented. The final branch-tip CI run determines verification status.
