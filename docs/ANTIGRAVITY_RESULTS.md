@@ -2,9 +2,11 @@
 
 **Date:** 2026-10-15  
 **Repository:** `https://github.com/shanmukhdatta/shanmukhdatta.github.io.git`  
-**Branch:** `redesign/shanxai-portfolio-v2`  
+**Branch:** `main` (merged from `redesign/shanxai-portfolio-v2`)  
 **Starting Commit:** `8f79bce5199d896331e8495d934369bedca70788`  
-**Final Commit:** `9f3c1332988809ad0f3a3f8085c42e3dd1101b22`  
+**Final Production Commit on `main`:** `ec79786f98f185cbdb53fd7860d1454a7ce53936`  
+**GitHub Actions CI Run on `main`:** `https://github.com/shanmukhdatta/shanmukhdatta.github.io/actions/runs/38712226750` (Result: **SUCCESS**)  
+**Pre-Launch Rollback Tag:** `portfolio-before-launch` (at commit `23ba55c`)  
 **Environment:** Windows 11, Node.js v25.9.0, npm 11.12.1, Chromium 156.0.8078.4 (Playwright v1.64.1)
 
 ---
