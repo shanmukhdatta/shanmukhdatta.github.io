@@ -2,10 +2,10 @@ import type {Metadata} from 'next';
 import Link from 'next/link';
 import {notFound} from 'next/navigation';
 import {ProjectVisual} from '../../../components/ProjectVisual';
-import {projects as seedProjects} from '../../../content/projects';
 import {projectBySlug,liveData} from '../../../lib/portfolio-store';
+// CMS-published edits and brand-new slugs must be visible immediately without rebuilding.
+export const dynamic='force-dynamic';
 export const dynamicParams=true;
-export function generateStaticParams(){return seedProjects.map(p=>({slug:p.slug}));}
 export async function generateMetadata({params}:{params:Promise<{slug:string}>}):Promise<Metadata>{const {slug}=await params;const p=await projectBySlug(slug);return p?{title:p.name,description:p.summary}:{title:'Project not found'};}
 export default async function ProjectCase({params}:{params:Promise<{slug:string}>}){
  const {slug}=await params;const data=await liveData();const p=data.projects.find(x=>x.slug===slug);if(!p)notFound();

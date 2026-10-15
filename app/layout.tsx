@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { site } from '../content/site';
+import {RouteTransition} from '../components/RouteTransition';
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://shanmukhdatta.github.io'),
@@ -13,5 +14,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({children}: Readonly<{children: React.ReactNode}>) {
-  return <html lang="en" suppressHydrationWarning><body><a className="skip-link" href="#content">Skip to content</a>{children}</body></html>;
+  return <html lang="en" suppressHydrationWarning><body><a className="skip-link" href="#content">Skip to content</a><RouteTransition/>{children}</body></html>;
 }

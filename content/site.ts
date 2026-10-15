@@ -31,6 +31,7 @@ export const milestones = [
   { date: '2025', label: 'Infosys Springboard', type: 'Experience', note: 'Software engineering internship focused on an AI-assisted music application.' },
   { date: '2025–2026', label: 'Campus development & AI leadership', type: 'Leadership', note: 'Contributions to student engineering communities, developer groups, and campus software.' },
   { date: '2026', label: 'QWorld QIntern', type: 'Research', note: 'Quantum-kernel malware classification, augmentation methods, and multi-seed evaluation.' },
+  { date: '2026', label: 'CodeGraphContext · Open Source', type: 'Open Source', note: 'Public GitHub contributions to source-code graph tooling and documentation.' },
   { date: '2026', label: 'Research, open source & hackathons', type: 'Research', note: 'Multilingual cultural alignment, healthcare AI, agent systems, security ML, and experimentation.' },
 ];
 
