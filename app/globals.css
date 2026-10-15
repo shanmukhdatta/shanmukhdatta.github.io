@@ -4544,3 +4544,79 @@ button:disabled {
     display: none;
   }
 }
+@media (max-width: 920px) {
+  .nav-links.nav-open {
+    width: min(420px, 88vw);
+    right: auto;
+    left: 0;
+    box-shadow: 20px 0 60px #0007;
+  }
+  .nav-inner {
+    position: relative;
+    z-index: 100;
+  }
+}
+.case-hero h1,
+.research-study h1,
+.archive-item strong,
+.hero-role {
+  overflow-wrap: anywhere;
+}
+.case-shell,
+.case-main,
+.case-hero > div {
+  min-width: 0;
+}
+.mobile-menu-search {
+  display: none;
+}
+@media (max-width: 920px) {
+  .mobile-menu-search {
+    display: block !important;
+  }
+}
+@media (max-width: 700px) {
+  .nav-actions .theme-toggle {
+    display: inline-flex;
+  }
+}
+/* Accessibility corrections from real Chromium/axe results. */
+.visual-neighbors {
+  opacity: 1;
+}
+.demo-notice a,
+.skill-caption a,
+.case-main p a,
+.writing-note p a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.feature-dots {
+  flex-wrap: wrap;
+  gap: 3px;
+}
+.feature-dots button,
+.feature-dots button.current {
+  position: relative;
+  min-width: 28px;
+  width: 28px;
+  height: 28px;
+  min-height: 28px;
+  background: transparent !important;
+  border: 0 !important;
+}
+.feature-dots button:after {
+  content: "";
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--muted);
+  border-radius: 6px;
+}
+.feature-dots button.current:after {
+  width: 18px;
+  background: var(--accent);
+}

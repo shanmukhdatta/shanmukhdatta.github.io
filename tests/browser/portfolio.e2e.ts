@@ -13,9 +13,9 @@ test('Quick/Explore, mobile navigation, road and semantic board', async ({ page 
   if (info.project.name === 'mobile') {
     await page.getByRole('button', { name: 'Open menu' }).click();
     await expect(page.getByRole('navigation', { name: 'Main navigation' })).toBeVisible();
-    await page
-      .getByRole('button', { name: 'Close navigation backdrop' })
-      .click({ position: { x: 2, y: 2 }, force: true });
+    await page.getByRole('button', { name: 'Close navigation backdrop' }).click({
+      position: { x: page.viewportSize()!.width - 4, y: page.viewportSize()!.height / 2 },
+    });
     await expect(page.getByRole('button', { name: 'Open menu' })).toBeVisible();
   }
   await page.getByRole('button', { name: 'Open milestone: NIT Jalandhar' }).click();
@@ -27,10 +27,17 @@ test('Quick/Explore, mobile navigation, road and semantic board', async ({ page 
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1);
   expect(overflow).toBe(false);
 });
-test('palette, demo resume, skill proofs and carousel', async ({ page }) => {
-  await page.keyboard.press('Control+k');
+test('palette, demo resume, skill proofs and carousel', async ({ page }, info) => {
+  if (info.project.name === 'mobile') {
+    await page.getByRole('button', { name: 'Open menu' }).click();
+    await page.getByRole('button', { name: 'Search portfolio' }).click();
+  } else await page.keyboard.press('Control+k');
   await page.getByPlaceholder('Search sections or projects…').fill('resume');
-  await expect(page.getByRole('dialog').getByRole('button', { name: /Resume/ })).toBeVisible();
+  await expect(
+    page
+      .getByRole('dialog')
+      .getByRole('button', { name: 'Resume Open public resume', exact: true }),
+  ).toBeVisible();
   await page.keyboard.press('Escape');
   await page.getByRole('button', { name: /PyTorch/ }).click();
   await expect(page.locator('.skill-proof')).toBeVisible();
@@ -103,4 +110,17 @@ test('demo draft publishing and gallery controls', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Browser tested demo' })).toBeVisible();
   await page.getByRole('button', { name: 'Next photograph' }).click();
   await expect(page.getByAltText(/Demo photograph 2/)).toBeVisible();
+});
+
+test('every project case study stays within the viewport', async ({ page }) => {
+  test.setTimeout(120000);
+  const data = await page.request.get('/api/content/').then((r) => r.json());
+  for (const p of data.projects) {
+    await page.goto(`/projects/${p.slug}/`, { waitUntil: 'domcontentloaded' });
+    await expect(page.getByRole('heading', { level: 1 })).toContainText(p.name);
+    expect(
+      await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1),
+      p.slug + ' overflow',
+    ).toBe(true);
+  }
 });

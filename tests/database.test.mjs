@@ -3,8 +3,9 @@ import { readFileSync } from 'node:fs';
 import assert from 'node:assert/strict';
 const db = new PGlite();
 try {
-  await db.exec('create role anon; create role authenticated; create role service_role;');
+  await db.exec('create role anon; create role authenticated; create role service_role bypassrls;');
   await db.exec(readFileSync('db/schema.sql', 'utf8'));
+  await db.exec(readFileSync('db/schema.sql', 'utf8')); // Migration is safe to reapply.
   const save = (revision, draft, published = null) =>
     db.query('select * from save_portfolio_document($1,$2,$3,$4)', [
       'site',
@@ -42,6 +43,9 @@ try {
   await db.exec('set role anon');
   await assert.rejects(db.query('select * from portfolio_documents'));
   await assert.rejects(db.query('select * from portfolio_history'));
+  await db.exec('reset role');
+  await db.exec('set role service_role');
+  assert.equal((await db.query('select * from portfolio_documents')).rows.length, 1);
   await db.exec('reset role');
   console.log(
     'PostgreSQL schema checks passed: revision conflicts, draft/publish separation, transactional history, OTP single-use, attempt cap, expiry, rate limits and denied anonymous reads.',

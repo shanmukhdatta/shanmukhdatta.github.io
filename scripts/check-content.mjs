@@ -9,7 +9,12 @@ const site = fs.readFileSync(path.join(root, 'content/site.ts'), 'utf8');
 const files = [];
 const scan = (folder) => {
   for (const dirent of fs.readdirSync(folder, { withFileTypes: true })) {
-    if (['node_modules', '.next', 'out', '.git'].includes(dirent.name)) continue;
+    if (
+      ['node_modules', '.next', 'out', '.git', 'playwright-report', 'test-results'].includes(
+        dirent.name,
+      )
+    )
+      continue;
     const loc = path.join(folder, dirent.name);
     if (dirent.isDirectory()) scan(loc);
     else if (/\.(?:tsx?|mjs|json|md|html|css)$/.test(dirent.name)) files.push(loc);

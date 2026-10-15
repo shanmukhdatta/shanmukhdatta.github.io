@@ -560,6 +560,9 @@ export function Portfolio({ initialData }: { initialData: PublicData }) {
             onPointerCancel={() => {
               if (longPress.current) clearTimeout(longPress.current);
             }}
+            onPointerLeave={() => {
+              if (longPress.current) clearTimeout(longPress.current);
+            }}
             onDoubleClick={() => window.location.assign('/control-center/')}
             title="Double-click for owner Control Center"
             onClick={() => scrollTo('home')}
@@ -593,6 +596,15 @@ export function Portfolio({ initialData }: { initialData: PublicData }) {
                 Resume ↗
               </a>
             )}
+            <button
+              className="mobile-menu-search"
+              onClick={() => {
+                setMobileMenu(false);
+                setPalette(true);
+              }}
+            >
+              Search portfolio
+            </button>
             <button className="mobile-menu-close" onClick={() => setMobileMenu(false)}>
               Close menu
             </button>

@@ -239,17 +239,23 @@ export function validateDocument(key: string, value: unknown) {
     text(x.description, 'SEO description');
     if (x.image !== '/opengraph-image') url(x.image, 'OpenGraph image', true);
     const seen = new Set();
+    const norm = (p: string) => p.replace(/\/$/, '') || '/';
     for (const r of list(x.redirects, 'redirects', 50)) {
       const rule = record(r);
       for (const k of ['from', 'to'])
         if (typeof rule[k] !== 'string' || !/^\/(?!\/)[a-z0-9/_-]*$/.test(rule[k] as string))
           throw new Error('Redirects must be local paths');
-      if (rule.from === rule.to || seen.has(rule.from))
+      if (norm(String(rule.from)) === norm(String(rule.to)) || seen.has(norm(String(rule.from))))
         throw new Error('Duplicate or self redirect');
-      seen.add(rule.from);
+      seen.add(norm(String(rule.from)));
+      if (/^\/(?:api|_next|control-center)(?:\/|$)/.test(String(rule.from)))
+        throw new Error('Reserved route cannot be redirected');
       if (typeof rule.permanent !== 'boolean') throw new Error('Invalid redirect');
     }
-    const rules = x.redirects as { from: string; to: string }[];
+    const rules = (x.redirects as { from: string; to: string }[]).map((r) => ({
+      from: norm(r.from),
+      to: norm(r.to),
+    }));
     for (const r of rules) {
       const seenPath = new Set([r.from]);
       let to = r.to;

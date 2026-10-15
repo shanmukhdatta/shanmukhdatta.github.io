@@ -100,3 +100,7 @@ create trigger portfolio_revision_history after insert or update on public.portf
 -- Extend editable documents while keeping the editorial register out of public feeds.
 alter table public.portfolio_documents drop constraint if exists portfolio_documents_key_check;
 alter table public.portfolio_documents add constraint portfolio_documents_key_check check(key in ('site','milestones','mindTopics','skills','projects','articles','research','seo','knowledge','intro','skillLinks','register'));
+
+-- Explicit server-role privileges do not depend on project default grants.
+grant select,insert,update,delete on public.portfolio_documents,public.portfolio_history,public.portfolio_otp,public.portfolio_inbox,public.portfolio_limits to service_role;
+grant usage,select on sequence public.portfolio_history_id_seq,public.portfolio_inbox_id_seq to service_role;

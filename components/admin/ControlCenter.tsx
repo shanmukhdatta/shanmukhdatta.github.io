@@ -272,6 +272,7 @@ function DraftPreview({ tab, value }: { tab: DocKey; value: unknown }) {
 }
 
 export function ControlCenter() {
+  const [metricText, setMetricText] = useState('[]');
   const [reviewed, setReviewed] = useState(false);
   const [authorized, setAuthorized] = useState<boolean | null>(null),
     [otp, setOtp] = useState(''),
@@ -399,6 +400,7 @@ export function ControlCenter() {
   function editProject(p: Project) {
     setWizard(true);
     setProject({ ...p });
+    setMetricText(JSON.stringify(p.metrics || []));
     setStep(0);
     setSelected(p.slug);
   }
@@ -423,6 +425,7 @@ export function ControlCenter() {
   }
   function editField(name: string, value: string) {
     if (name === 'metrics') {
+      setMetricText(value);
       try {
         const metrics = JSON.parse(value);
         if (!Array.isArray(metrics)) throw new Error();
@@ -712,11 +715,11 @@ export function ControlCenter() {
                 id="wizard-entry"
                 rows={4}
                 value={
-                  Array.isArray(project[steps[step][0] as keyof Project])
-                    ? steps[step][0] === 'metrics'
-                      ? JSON.stringify(project.metrics || [])
-                      : (project[steps[step][0] as keyof Project] as string[]).join(', ')
-                    : String(project[steps[step][0] as keyof Project] || '')
+                  steps[step][0] === 'metrics'
+                    ? metricText
+                    : Array.isArray(project[steps[step][0] as keyof Project])
+                      ? (project[steps[step][0] as keyof Project] as string[]).join(', ')
+                      : String(project[steps[step][0] as keyof Project] || '')
                 }
                 onChange={(e) => editField(steps[step][0], e.target.value)}
               />
@@ -760,7 +763,20 @@ export function ControlCenter() {
                 Previous
               </button>
               {step < steps.length ? (
-                <button className="btn btn-primary" onClick={() => setStep((x) => x + 1)}>
+                <button
+                  className="btn btn-primary"
+                  onClick={() => {
+                    if (steps[step][0] === 'metrics') {
+                      try {
+                        if (!Array.isArray(JSON.parse(metricText))) throw new Error();
+                      } catch {
+                        setNote('Correct the measurement JSON array before continuing.');
+                        return;
+                      }
+                    }
+                    setStep((x) => x + 1);
+                  }}
+                >
                   Next
                 </button>
               ) : (

@@ -82,3 +82,15 @@ it('rejects orphan project links on publication', async () => {
     }),
   ).toThrow(/missing/);
 });
+
+it('rejects slash-normalized redirect loops', () => {
+  expect(() =>
+    validateDocument('seo', {
+      ...editorial.seo,
+      redirects: [
+        { from: '/a/', to: '/b', permanent: true },
+        { from: '/b/', to: '/a', permanent: true },
+      ],
+    }),
+  ).toThrow();
+});
