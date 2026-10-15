@@ -357,8 +357,8 @@ a:focus-visible {
   gap: 13px;
 }
 .journey-rail button {
-  width: 19px;
-  height: 18px;
+  width: 24px;
+  height: 24px;
   display: grid;
   place-items: center;
   border: 0;

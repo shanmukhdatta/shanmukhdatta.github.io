@@ -29,8 +29,18 @@ afterEach(() => {
   cleanup();
   vi.useRealTimers();
   vi.restoreAllMocks();
-  if (typeof localStorage !== 'undefined') {
-    localStorage.clear();
-    sessionStorage.clear();
+  if (typeof window !== 'undefined') {
+    if (
+      typeof window.localStorage !== 'undefined' &&
+      typeof window.localStorage.clear === 'function'
+    ) {
+      window.localStorage.clear();
+    }
+    if (
+      typeof window.sessionStorage !== 'undefined' &&
+      typeof window.sessionStorage.clear === 'function'
+    ) {
+      window.sessionStorage.clear();
+    }
   }
 });

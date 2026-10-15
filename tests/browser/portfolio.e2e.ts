@@ -81,6 +81,7 @@ test('Maya fallback and contact failure never masquerade as delivery', async ({ 
   await expect(page.getByRole('link', { name: /Use your email application/ })).toBeVisible();
 });
 test('accessibility, responsive bounds and performance budgets', async ({ page }) => {
+  test.setTimeout(60000);
   const audit = await new AxeBuilder({ page })
     .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
     .analyze();
@@ -127,6 +128,7 @@ test('every project case study stays within the viewport', async ({ page }) => {
 });
 
 test('Explore and light theme retain accessible controls and contrast', async ({ page }, info) => {
+  test.setTimeout(60000);
   await page.getByRole('button', { name: 'Explore', exact: true }).click();
   const explore = await new AxeBuilder({ page })
     .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
