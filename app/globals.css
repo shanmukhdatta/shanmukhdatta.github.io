@@ -21,7 +21,7 @@
   --ink: #111113;
   --muted: #565962;
   --line: rgba(0, 0, 0, 0.15);
-  --accent: #a86b0d;
+  --accent: #805006;
   --accent-soft: rgba(175, 112, 19, 0.12);
   color-scheme: light;
 }
@@ -4635,4 +4635,8 @@ button:disabled {
 .mind-related .pill {
   color: #26382d;
   border-color: #657462;
+}
+
+:root[data-theme="light"] .stage:not(.stage-amber) {
+  color: #355d47;
 }
