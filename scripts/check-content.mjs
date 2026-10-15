@@ -28,6 +28,8 @@ assert.equal(new Set(countGroups).size,countGroups.length,'Duplicate repo direct
 // Disallow academic score fields in any shipped source/content/build, without embedding them in site copy.
 const forbidden=[String.fromCharCode(99,103,112,97),String.fromCharCode(103,112,97),'grade'+' point average','academic'+' percentage'];
 for (const f of files) {
+ // Reviewed allowlist: npm lockfile integrity hashes are dependency metadata, not public editorial content.
+ if(path.basename(f)==='package-lock.json')continue;
  const body=fs.readFileSync(f,'utf8').toLowerCase();
  for (const word of forbidden) assert.ok(!body.includes(word),`Academic score field detected in ${path.relative(root,f)}`);
 }

@@ -50,3 +50,14 @@ npm run check
 For the live owner backend, rerun the idempotent `db/schema.sql` migration in the intended private Supabase project. New functions `save_portfolio_document` and `consume_portfolio_otp` are required by the updated routes. After configuring `.env.local` from `.env.example`, test two editor sessions saving the same revision: exactly one must succeed; the other must return 409. Verify that two concurrent attempts to consume one valid login code yield at most one authenticated session.
 
 Visually review Quick/Explore, narrow mobile layout, Journey detail notes, intro skip/replay, Escape and Tab in overlays, project filters, carousel arrow keys, chalk drawing, contact error fallback, and Maya fallback. This environment verified production HTTP behavior; it did not certify visual browser or external-service behavior.
+
+## Demo and full-plan audit pass
+
+Read `docs/PLAN_AUDIT.md` before treating the project as fully complete. It lists implemented, partial, missing and externally unverified requirements.
+
+- `/demo/` previews fictional editing, publication, revision restore, inbox and contact signal states without authenticating or writing real content.
+- Gallery and resume are local labeled demo assets. Replace them before presenting the gallery as personal photography or submitting the PDF as a CV.
+- `npm run test:interactions` runs component and API simulations.
+- `npm run test:database` applies the actual SQL in an embedded PostgreSQL engine; no Supabase credentials are used.
+- Apply the updated `db/schema.sql` to enable private revision history and backup export.
+- `docs/link-audit.json` records outbound link reachability. One demo endpoint timed out; HTTP 200 alone does not validate the target application's behavior.

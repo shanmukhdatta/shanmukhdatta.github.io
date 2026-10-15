@@ -14,7 +14,7 @@ export const site = {
     github: 'https://github.com/shanmukhdatta',
     linkedin: 'https://www.linkedin.com/in/Shanmukh-Datta',
     scholar: null as string | null,
-    resume: null as string | null,
+    resume: '/demo/demo-resume.pdf' as string | null,
   },
   availability: 'Open to research collaborations and engineering opportunities',
   quote: 'Stop Thinking. Start Doing.',
@@ -23,7 +23,8 @@ export const site = {
   aboutDetail: 'My work moves between multilingual AI, security, health computer vision, autonomous agents and developer infrastructure. Different domains, one approach: be curious, measure carefully, and make the result useful.',
   currentlyExploring: 'Reliable evaluation · Agent systems · AI products',
   signalAccent: true, 
-  gallery: [] as {src:string;title:string;place:string;year?:string}[],
+  demoAssets: true,
+  gallery: Array.from({length:5},(_,i)=>({src:`/demo/gallery-${i+1}.jpg`,title:`Demo photograph ${i+1}`,place:'Sample imagery - not personal travel',year:'Demo'})) as {src:string;title:string;place:string;year?:string}[],
 };
 
 export const milestones = [

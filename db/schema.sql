@@ -74,3 +74,25 @@ alter table public.portfolio_documents enable row level security;
 alter table public.portfolio_otp enable row level security;
 alter table public.portfolio_inbox enable row level security;
 alter table public.portfolio_limits enable row level security;
+
+-- Private revision snapshots are created in the same transaction as the edit.
+create table if not exists public.portfolio_history (
+ id bigint generated always as identity primary key,
+ key text not null,
+ revision integer not null,
+ action text not null,
+ snapshot jsonb not null,
+ created_at timestamptz not null default now()
+);
+alter table public.portfolio_history enable row level security;
+revoke all on public.portfolio_history from anon,authenticated;
+create or replace function public.record_portfolio_revision()
+returns trigger language plpgsql security definer set search_path=public as $$
+begin
+ insert into portfolio_history(key,revision,action,snapshot)
+ values(new.key,new.revision,case when tg_op='INSERT' then 'created' when new.published is distinct from old.published then 'published' else 'draft updated' end,to_jsonb(new));
+ return new;
+end $$;
+revoke all on function public.record_portfolio_revision() from public,anon,authenticated;
+drop trigger if exists portfolio_revision_history on public.portfolio_documents;
+create trigger portfolio_revision_history after insert or update on public.portfolio_documents for each row execute function public.record_portfolio_revision();

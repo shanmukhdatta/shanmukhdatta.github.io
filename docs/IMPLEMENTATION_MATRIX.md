@@ -51,3 +51,7 @@ The presence of an API route or frontend feature demonstrates **code written**, 
 - A committed lockfile and `npm ci` make CI installation repeatable. Ten tests validate contracts and actual content schemas; production smoke checks exercise all 29 case studies, core routes, 404, response headers and unauthenticated boundaries.
 
 No live Supabase/Resend/Groq credentials, personal gallery images or resume were provided. Service integrations, real browser/mobile visual review and domain cutover remain release gates. The original main branch is preserved.
+
+## Superseding detailed audit
+
+`docs/PLAN_AUDIT.md` is the current detailed comparison against the master plan. Earlier broad “implemented” rows in this checklist describe core code presence and must not be read as 100% design compliance. The audit records remaining Writing/CMS/research/visual/performance gaps and verification limits. Five demo photos, a clearly labeled sample resume, a `/demo/` sandbox and private history/backup code are now included.
