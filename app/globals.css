@@ -350,11 +350,11 @@ a:focus-visible {
   position: fixed;
   z-index: 70;
   right: 18px;
-  top: 50%;
+  top: calc(50% - 15px);
   transform: translateY(-50%);
   display: flex;
   flex-direction: column;
-  gap: 13px;
+  gap: 10px;
 }
 .journey-rail button {
   width: 24px;
@@ -3772,7 +3772,7 @@ a:focus-visible {
 .maya-nudge {
   position: fixed;
   right: 18px;
-  bottom: 100px;
+  bottom: 110px;
   z-index: 120;
   background: #13151b;
   color: #ededf0;

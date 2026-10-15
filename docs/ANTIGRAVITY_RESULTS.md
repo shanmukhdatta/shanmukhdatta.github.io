@@ -64,6 +64,9 @@
 4. **Playwright Timeout Resilience:**
    - *Issue:* Comprehensive AxeBuilder audits across the entire DOM took up to 22s on Windows emulation, bumping against the 30s default timeout during server cold starts.
    - *Fix:* Updated `playwright.config.ts` timeout to 60000ms and set test-level timeout on the dual Axe audit in `tests/browser/portfolio.e2e.ts`.
+5. **WCAG 2.2 Target Spacing (`SC 2.5.8`) between Journey Rail & Maya FAB:**
+   - *Issue:* On 720p height viewports, the bottom rail button (`button[title="Connect"]`) came within 23px (< 24px minimum required offset) of `.maya-fab`.
+   - *Fix:* In `app/globals.css`, tightened `.journey-rail` button gap to 10px and centered at `top: calc(50% - 15px);`, increasing distance from `.maya-fab` to > 40px; adjusted `.maya-nudge` bottom offset to 110px.
 
 ---
 
