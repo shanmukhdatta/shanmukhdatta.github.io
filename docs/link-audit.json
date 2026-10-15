@@ -1,0 +1,391 @@
+{
+  "checkedAt": "2026-10-15",
+  "method": "HTTP HEAD with redirects; reachability only, not ownership or application correctness",
+  "results": [
+    {
+      "url": "https://github.com/shanmukhdatta/Qintern26",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/Qintern26"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/dravidian-cultural-alignment",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/dravidian-cultural-alignment"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/Facial_Skin_Diesease",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/Facial_Skin_Diesease"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/DermaAI-Facial-disease-prediction",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/DermaAI-Facial-disease-prediction"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/DermaLens-AI",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/DermaLens-AI"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/No-Hack-",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/No-Hack-"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/CLARION",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/CLARION"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/Soochana-AI",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/Soochana-AI"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/space-anomaly-detection",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/space-anomaly-detection"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/Network-Security",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/Network-Security"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/business-entity-resolution",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/business-entity-resolution"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/bhashaguard-edge",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/bhashaguard-edge"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/Chrono-Mind-AI",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/Chrono-Mind-AI"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/Life-Sync-AI",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/Life-Sync-AI"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/Resume-Copilot",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/Resume-Copilot"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/workspace-mcp",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/workspace-mcp"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/kaggle-gpu-mcp",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/kaggle-gpu-mcp"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/ShanX-Bot",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/ShanX-Bot"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/Nuera-Chat",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/Nuera-Chat"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/NeuraPlan-AI",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/NeuraPlan-AI"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/VoiceDoc",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/VoiceDoc"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/MediCare-AI",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/MediCare-AI"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/MedTech",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/MedTech"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/Simple-Chatbot",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/Simple-Chatbot"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/SafeWorker-AI",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/SafeWorker-AI"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/Shanx-AI-Extract",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/Shanx-AI-Extract"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/Aurbana",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/Aurbana"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/SENTRY",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/SENTRY"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/EAPCET-Predictor",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/EAPCET-Predictor"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/GestureVerse",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/GestureVerse"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/carbonwise-ai",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/carbonwise-ai"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/ecosangam_trae",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/ecosangam_trae"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/-ElectIQ-AI",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/-ElectIQ-AI"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/fifa-smart-stadium-copilot",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/fifa-smart-stadium-copilot"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/CodeGraphContext",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/CodeGraphContext"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/India-Space-Lab",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/India-Space-Lab"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/flyrank-ai-ml",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/flyrank-ai-ml"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/flyrank-ml-internship-starter",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/flyrank-ml-internship-starter"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/nitj-shanmukhdatta-hackthon",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/nitj-shanmukhdatta-hackthon"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/agentic-honey-pot",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/agentic-honey-pot"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/whispers_of_the_wires",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/whispers_of_the_wires"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/ANN-CLASSIFICATION-PROJECT",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/ANN-CLASSIFICATION-PROJECT"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/vibe-forge-gui",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/vibe-forge-gui"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/Next-Word-Prediction-Using-LSTM",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/Next-Word-Prediction-Using-LSTM"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/Natural-Macine-Translation-Eng-Hin-Using-Attention-Encoder-Decoder",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/Natural-Macine-Translation-Eng-Hin-Using-Attention-Encoder-Decoder"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/NLP-Deep-Learning-Research",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/NLP-Deep-Learning-Research"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/Simple-GenAI-App-using-Langchain-Gemma",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/Simple-GenAI-App-using-Langchain-Gemma"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/Q-A-Chatbot-with-Ollama-and-OpenAI-API",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/Q-A-Chatbot-with-Ollama-and-OpenAI-API"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/RAG-Document-Q-A-with-Groq-and-Lama3",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/RAG-Document-Q-A-with-Groq-and-Lama3"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/RAG-Q-A-Conversation-With-PDF-Including-Chat-History",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/RAG-Q-A-Conversation-With-PDF-Including-Chat-History"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/Simple-Linear-Regression---Height-n-Weight",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/Simple-Linear-Regression---Height-n-Weight"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/Multiple-Linear-Regression",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/Multiple-Linear-Regression"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/Numpy",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/Numpy"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/House-Rent-Prediction",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/House-Rent-Prediction"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/ML-End-To-End",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/ML-End-To-End"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/Calories-Brunt-Prediction---ML",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/Calories-Brunt-Prediction---ML"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/Student-Perfomance-prediction-ML",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/Student-Perfomance-prediction-ML"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/Fear-Free-Python-App",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/Fear-Free-Python-App"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/Bank_Churn_prediction",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/Bank_Churn_prediction"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/Quantumn-Computing-Resources",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/Quantumn-Computing-Resources"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/DSA",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/DSA"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/GATE_DA",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/GATE_DA"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/core36-tracker",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/core36-tracker"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/Coding-Interview-Questions",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/Coding-Interview-Questions"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/awesome-llm-apps",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/awesome-llm-apps"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/edgeai",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/edgeai"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/neetcode-submissions",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/neetcode-submissions"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/Complete-Python-Bootcamp",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/Complete-Python-Bootcamp"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/html-protifolio",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/html-protifolio"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/shanmukhdatta",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/shanmukhdatta"
+    },
+    {
+      "url": "https://github.com/shanmukhdatta/shanmukhdatta.github.io",
+      "status": 200,
+      "finalUrl": "https://github.com/shanmukhdatta/shanmukhdatta.github.io"
+    },
+    {
+      "url": "https://nitj-shanmukhdatta-hackthon-lime.vercel.app/",
+      "status": 200,
+      "finalUrl": "https://nitj-shanmukhdatta-hackthon-lime.vercel.app/"
+    },
+    {
+      "url": "https://shan-x-bot.vercel.app/",
+      "status": 200,
+      "finalUrl": "https://shan-x-bot.vercel.app/"
+    },
+    {
+      "url": "https://life-sync-ai-red.vercel.app/",
+      "status": 200,
+      "finalUrl": "https://life-sync-ai-red.vercel.app/"
+    },
+    {
+      "url": "https://aurbana.vercel.app/",
+      "status": 200,
+      "finalUrl": "https://aurbana.vercel.app/"
+    },
+    {
+      "url": "https://eapcet-predictor-2o1p.onrender.com/",
+      "status": "unverified",
+      "reason": "TimeoutError"
+    },
+    {
+      "url": "https://carbonwise-ai-1234.web.app/",
+      "status": 200,
+      "finalUrl": "https://carbonwise-ai-1234.web.app/"
+    }
+  ]
+}

@@ -1,0 +1,154 @@
+'use client';
+import Link from 'next/link';
+import { useState } from 'react';
+import { PhotoGallery } from '../SceneEnhancements';
+import { site } from '../../content/site';
+
+const sample = {
+  title: 'Evidence Explorer — Demo',
+  summary: 'A fictional sample project for testing the editor.',
+  stage: 'Prototype',
+  tags: ['Python', 'TypeScript'],
+  published: false,
+};
+export function DemoLab() {
+  const [draft, setDraft] = useState(sample),
+    [published, setPublished] = useState(sample),
+    [history, setHistory] = useState<(typeof sample)[]>([]),
+    [note, setNote] = useState(''),
+    [result, setResult] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+  function publish() {
+    setHistory((h) => [published, ...h]);
+    setPublished({ ...draft, published: true });
+    setNote('Demo published in this tab only. Your real portfolio has not changed.');
+  }
+  return (
+    <main id="content" className="demo-lab wrap">
+      <nav className="case-top">
+        <Link href="/">← Portfolio</Link>
+        <Link href="/control-center/">Real owner sign-in ↗</Link>
+      </nav>
+      <p className="eyebrow">SANDBOX / FICTIONAL SAMPLE CONTENT</p>
+      <h1>Try the whole idea.</h1>
+      <p>
+        This demo uses sample photographs, a fictional project, local draft publishing and simulated
+        contact responses. It sends no email, authenticates no administrator and changes no real
+        content. Refresh resets the sandbox.
+      </p>
+      <div className="demo-grid">
+        <section>
+          <h2>Five-image gallery</h2>
+          <PhotoGallery photos={site.gallery} />
+          <a className="btn" href="/demo/demo-resume.pdf" target="_blank" rel="noopener noreferrer">
+            Open demo resume ↗
+          </a>
+        </section>
+        <section>
+          <h2>Draft → preview → publish</h2>
+          <label>
+            Demo project title
+            <input
+              value={draft.title}
+              onChange={(e) => setDraft((p) => ({ ...p, title: e.target.value }))}
+            />
+          </label>
+          <label>
+            Demo summary
+            <textarea
+              value={draft.summary}
+              onChange={(e) => setDraft((p) => ({ ...p, summary: e.target.value }))}
+            />
+          </label>
+          <div className="admin-controls">
+            <button
+              className="btn"
+              onClick={() => setNote('Demo draft saved in this tab. Public preview is unchanged.')}
+            >
+              Save demo draft
+            </button>
+            <button className="btn btn-primary" onClick={publish}>
+              Publish demo
+            </button>
+            <button
+              className="btn"
+              onClick={() => {
+                setDraft(published);
+                setNote('Demo draft restored from published snapshot.');
+              }}
+            >
+              Restore published
+            </button>
+          </div>
+          <p role="status">{note}</p>
+          <article className="demo-preview">
+            <p className="eyebrow">PUBLISHED DEMO PREVIEW</p>
+            <h3>{published.title}</h3>
+            <p>{published.summary}</p>
+            <span className="stage">{published.stage}</span>
+          </article>
+          <h3>Demo revision history</h3>
+          {history.length === 0 ? (
+            <p>No previous demo revisions.</p>
+          ) : (
+            history.map((v, i) => (
+              <button
+                key={i}
+                className="btn"
+                onClick={() => {
+                  setDraft(v);
+                  setNote('Historical revision loaded into draft. Publish explicitly to apply.');
+                }}
+              >
+                Restore draft revision {history.length - i}
+              </button>
+            ))
+          )}
+        </section>
+        <section>
+          <h2>Contact signal simulator</h2>
+          <p>
+            Choose an outcome to inspect amber, green and red response states. Nothing is
+            transmitted.
+          </p>
+          <div className={'demo-signal signal-' + result} aria-label={'Demo signal: ' + result} />
+          <div className="admin-controls">
+            <button className="btn" onClick={() => setResult('sending')}>
+              Simulate sending
+            </button>
+            <button className="btn" onClick={() => setResult('success')}>
+              Simulate success
+            </button>
+            <button className="btn" onClick={() => setResult('error')}>
+              Simulate failure
+            </button>
+          </div>
+          <p role="status">
+            {result === 'success'
+              ? 'DEMO: simulated success; no message was sent.'
+              : result === 'error'
+                ? 'DEMO: simulated delivery error; email fallback available.'
+                : result === 'sending'
+                  ? 'DEMO: waiting for simulated provider response.'
+                  : 'Ready for a demo outcome.'}
+          </p>
+        </section>
+        <section>
+          <h2>Demo inbox</h2>
+          <article className="demo-preview">
+            <strong>Example Visitor · sample@example.com</strong>
+            <p>Fictional message: I would like to discuss a research collaboration.</p>
+          </article>
+          <h2>Research and media sample</h2>
+          <p>
+            Study: Fictional benchmark. Dataset: synthetic demo fixture. Status: Experiment. No
+            measured results or publication are claimed.
+          </p>
+          <p>Use the real project library to examine the portfolio’s actual records.</p>
+          <Link className="btn" href="/projects/">
+            Open project library ↗
+          </Link>
+        </section>
+      </div>
+    </main>
+  );
+}

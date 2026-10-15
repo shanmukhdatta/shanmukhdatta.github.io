@@ -1,0 +1,52 @@
+name: shanXAI V2 CI
+on:
+  push:
+    branches: ["redesign/**"]
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  content-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Audit production dependencies
+        run: npm audit --omit=dev --audit-level=high
+      - name: Lint and format
+        run: npm run lint && npm run format:check
+      - name: Audit public content and application contracts
+        run: npm run test
+      - name: Interaction and API simulations
+        run: npm run test:interactions
+      - name: PostgreSQL schema and security tests
+        run: npm run test:database
+      - name: TypeScript strict check
+        run: npm run typecheck
+      - name: Build full-stack application
+        run: npm run build
+      - name: Production route and API smoke checks
+        run: npm run test:smoke
+      - name: Upload Next.js build summary
+        if: always()
+        run: test -d .next || echo "Build output missing"
+
+      - name: Install browser for real desktop and mobile QA
+        run: npx playwright install --with-deps chromium
+      - name: Browser E2E, accessibility and performance budgets
+        run: npm run test:e2e
+      - name: Upload browser report and screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: portfolio-browser-review
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
