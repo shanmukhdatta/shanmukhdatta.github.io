@@ -1031,10 +1031,10 @@ a:focus-visible {
   color: #656255;
 }
 .mind .section-label span {
-  color: #8d5c10;
+  color: #704708;
 }
 .mind .section-intro > p:last-child {
-  color: #676658;
+  color: #555448;
 }
 .mind-room {
   display: grid;
@@ -4626,4 +4626,13 @@ button:disabled {
 }
 .site-footer h2 em {
   color: #ffb224;
+}
+
+/* The cream research wall keeps its own ink in both global themes. */
+.mind-related small {
+  color: #555448;
+}
+.mind-related .pill {
+  color: #26382d;
+  border-color: #657462;
 }
