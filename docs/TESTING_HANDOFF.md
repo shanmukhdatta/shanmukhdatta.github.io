@@ -35,3 +35,18 @@ Visit `http://localhost:3000`. Before configuring external services, the public 
 ## Status before local integration
 
 Static content and automated source checks can run without any external credentials. Real Supabase, Resend, Groq, production Vercel and domain checks remain unverified until the owner connects them. The existing live website on `main` must not be modified until approved.
+
+## Verify this completion commit
+
+```sh
+git checkout redesign/shanxai-portfolio-v2
+git pull --ff-only
+npm ci
+npm run check
+```
+
+`check` runs the content tests, TypeScript, production build and local production HTTP smoke checks. The smoke script starts and stops its own server with provider credentials disabled. It does not send email or call AI providers.
+
+For the live owner backend, rerun the idempotent `db/schema.sql` migration in the intended private Supabase project. New functions `save_portfolio_document` and `consume_portfolio_otp` are required by the updated routes. After configuring `.env.local` from `.env.example`, test two editor sessions saving the same revision: exactly one must succeed; the other must return 409. Verify that two concurrent attempts to consume one valid login code yield at most one authenticated session.
+
+Visually review Quick/Explore, narrow mobile layout, Journey detail notes, intro skip/replay, Escape and Tab in overlays, project filters, carousel arrow keys, chalk drawing, contact error fallback, and Maya fallback. This environment verified production HTTP behavior; it did not certify visual browser or external-service behavior.

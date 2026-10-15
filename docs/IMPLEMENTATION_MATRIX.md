@@ -5,7 +5,7 @@
 
 | Feature | Code | Verification status / limitation |
 | --- | --- | --- |
-| Responsive Quick + Explore views | `components/Portfolio.tsx` | Implemented; desktop/mobile browser QA pending |
+| Responsive Quick + Explore views | `components/Portfolio.tsx` | Implemented; production HTTP checks pass; desktop/mobile visual QA pending |
 | Intro with greetings, motto, skip and replay | `components/Portfolio.tsx` | Implemented; reduced-motion fallback; duration optimized vs original concept |
 | Dark/silver + Signal Amber with light mode | `app/globals.css`, `content/site.ts` | Implemented; owner can disable accent through published site settings |
 | Interactive portrait and hero constellation | `components/Portfolio.tsx` | GitHub avatar available; personal photo not yet supplied |
@@ -20,7 +20,7 @@
 | Maya assistant, fallback + streamed responses | `app/api/maya/route.ts`, `components/Portfolio.tsx` | Code implemented; real Groq key and live response QA required |
 | Responsive contact terminal + real contact form | `components/ContactForm.tsx`, `app/api/contact/route.ts` | Code implemented; verified sender & delivery test required |
 | Owner-only OTP sign-in and sessions | `app/api/admin/*`, `lib/security.ts` | Code implemented; Supabase/Resend and auth penetration tests required |
-| Private drafts + publish + restore + revision check | `app/api/admin/documents/route.ts`, `components/admin/ControlCenter.tsx` | Code implemented; database migration & multi-session tests required |
+| Private drafts + publish + restore + revision check | `app/api/admin/documents/route.ts`, `components/admin/ControlCenter.tsx` | Code implemented; apply updated SQL for atomic revision checks; live database integration remains to be exercised |
 | 12-step case-study wizard, visual preview | `components/admin/ControlCenter.tsx` | Implemented with structured JSON editor |
 | Media library, image and public-resume uploads | `app/api/admin/media/route.ts` | Code implemented; owner must create Storage bucket; no personal assets included |
 | CMS inbox, public resume and theme settings | `app/api/admin/inbox/route.ts`, `content/site.ts` | Code implemented; integration test and private owner review required |
@@ -40,3 +40,14 @@
 ## Important claims
 
 The presence of an API route or frontend feature demonstrates **code written**, not that a third-party service is provisioned or its integration has been exercised successfully. Missing assets remain placeholders rather than fabricated photos or screenshots. Research projects retain explicit stages and evidence limits.
+
+## Completion pass — 15 October 2026
+
+- Published CMS data now renders on the server for both homepage and archive.
+- Schema validation rejects incomplete scenes, invalid statuses, duplicate slugs, missing related projects, and unsafe paper/gallery/screenshot URLs. Invalid stored documents fall back to the shipped data.
+- Journey signs open keyboard-accessible detail notes. The project archive filters by stage and supplied year.
+- Intro, command palette, Journey notes and mobile navigation trap focus and restore the opener. Featured projects support arrow keys; Maya serializes streamed requests.
+- CMS saves use a PostgreSQL compare-and-swap function; OTP checks consume codes transactionally to prevent duplicate use. Apply the updated `db/schema.sql` before enabling owner login.
+- A committed lockfile and `npm ci` make CI installation repeatable. Ten tests validate contracts and actual content schemas; production smoke checks exercise all 29 case studies, core routes, 404, response headers and unauthenticated boundaries.
+
+No live Supabase/Resend/Groq credentials, personal gallery images or resume were provided. Service integrations, real browser/mobile visual review and domain cutover remain release gates. The original main branch is preserved.

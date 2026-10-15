@@ -42,3 +42,35 @@ revoke all on function public.consume_rate_limit(text,integer,integer) from publ
 grant execute on function public.consume_rate_limit(text,integer,integer) to service_role;
 -- Create a *public* portfolio-media Storage bucket in the Supabase dashboard.
 -- Admin uploads require the service role key; no direct visitor uploads.
+
+-- Atomic revision guard: two editors cannot overwrite each other after the same read.
+create or replace function public.save_portfolio_document(p_key text,p_draft jsonb,p_published jsonb,p_revision integer)
+returns setof public.portfolio_documents language plpgsql security definer set search_path=public as $$
+begin
+ if p_revision=0 then
+  return query insert into portfolio_documents(key,draft,published,revision)
+   values(p_key,p_draft,p_published,1) on conflict(key) do nothing returning *;
+ else
+  return query update portfolio_documents set draft=p_draft,published=p_published,
+   revision=p_revision+1,updated_at=now() where key=p_key and revision=p_revision returning *;
+ end if;
+end $$;
+-- A code can create at most one session, even with simultaneous correct requests.
+create or replace function public.consume_portfolio_otp(p_email text,p_hash text)
+returns boolean language plpgsql security definer set search_path=public as $$
+declare entry portfolio_otp%rowtype;
+begin
+ select * into entry from portfolio_otp where email=p_email for update;
+ if not found or entry.attempts>=5 or entry.expires_at<=now() then return false; end if;
+ if entry.code_hash=p_hash then delete from portfolio_otp where email=p_email;return true; end if;
+ update portfolio_otp set attempts=attempts+1 where email=p_email;
+ return false;
+end $$;
+revoke all on function public.save_portfolio_document(text,jsonb,jsonb,integer) from public,anon,authenticated;
+revoke all on function public.consume_portfolio_otp(text,text) from public,anon,authenticated;
+grant execute on function public.save_portfolio_document(text,jsonb,jsonb,integer) to service_role;
+grant execute on function public.consume_portfolio_otp(text,text) to service_role;
+alter table public.portfolio_documents enable row level security;
+alter table public.portfolio_otp enable row level security;
+alter table public.portfolio_inbox enable row level security;
+alter table public.portfolio_limits enable row level security;

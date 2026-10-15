@@ -18,8 +18,9 @@ export async function PUT(request:Request){
   const draft=action==='restore'?(prev?.published??baseline[key]):body.value;
   if(action==='restore')validateDocument(key,draft);
   const published=action==='publish'?body.value:prev?.published??null;
-  const next={key,draft,published,revision:expected+1,updated_at:new Date().toISOString()};
-  await db('portfolio_documents',{method:'POST',query:'on_conflict=key',prefer:'resolution=merge-duplicates,return=representation',body:next});
-  return Response.json({ok:true,document:next});
+  // Compare-and-swap in PostgreSQL, not a read followed by an unconditional upsert.
+  const saved=await db<Row[]>('rpc/save_portfolio_document',{method:'POST',body:{p_key:key,p_draft:draft,p_published:published,p_revision:expected}});
+  if(!saved.length)return Response.json({error:'Another session edited this document. Refresh before saving.'},{status:409});
+  return Response.json({ok:true,document:saved[0]});
  }catch(e){return jsonError(e);}
 }

@@ -14,14 +14,17 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+          cache: npm
       - name: Install dependencies
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
       - name: Audit public content and application contracts
         run: npm run test
       - name: TypeScript strict check
         run: npm run typecheck
       - name: Build full-stack application
         run: npm run build
+      - name: Production route and API smoke checks
+        run: npm run test:smoke
       - name: Upload Next.js build summary
         if: always()
         run: test -d .next || echo "Build output missing"

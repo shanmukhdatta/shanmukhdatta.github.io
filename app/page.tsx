@@ -1,2 +1,4 @@
 import { Portfolio } from '../components/Portfolio';
-export default function HomePage() { return <Portfolio/>; }
+import {liveData} from '../lib/portfolio-store';
+export const dynamic='force-dynamic';
+export default async function HomePage() { return <Portfolio initialData={await liveData()}/>; }
