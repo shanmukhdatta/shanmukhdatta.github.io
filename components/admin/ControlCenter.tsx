@@ -87,7 +87,7 @@ export default function ControlCenter(){
   if(!editing)throw Error('No selected record');
   const identity=editing.version>0||editing.origin==='built-in'?editing.id:editId||idFrom(String(draft.name||draft.title||draft.role||draft.group||draft.caption||draft.phase||''));
   const id=identity.toLowerCase().trim();
-  const payload={...draft,...(kind==='work'?{id}:{}),...(kind==='blog'?{slug:id}:{})};
+  const payload: Record<string,unknown> = {...draft,...(kind==='work'?{id}:{}),...(kind==='blog'?{slug:id}:{})};
   if(kind==='profile'&&editing){payload.gallery=editing.payload.gallery||[]}
   return {...editing,kind,id,payload,status:publishStatus};
  }
