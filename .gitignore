@@ -6,6 +6,3 @@ out/
 !.env.example
 .DS_Store
 *.tsbuildinfo
-
-playwright-report/
-test-results/
