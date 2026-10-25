@@ -1,6 +1,6 @@
-# Student's Blackboard — Phase 2 Portfolio
+# Student's Blackboard — Portfolio (Phases 2 + 3)
 
-An editable, notebook/chalkboard-inspired student portfolio for **Boda Shanmukh Datta**. Its appearance follows the user's approved design, including a multilingual introduction, strong black geometric outlines, colored rectangular nav, diagonal work links, and a real cropped photo positioned **to the right of the Home introduction even on mobile**.
+A notebook/chalkboard-inspired student portfolio for **Boda Shanmukh Datta**. Its appearance follows the user's approved design, including a multilingual introduction, strong black geometric outlines, colored rectangular nav, diagonal work links, and a real cropped photo positioned **to the right of the Home introduction even on mobile**.
 
 ## What you get
 
@@ -11,13 +11,21 @@ An editable, notebook/chalkboard-inspired student portfolio for **Boda Shanmukh 
 - Real resume PDF, cropped and full-resolution-proportion gallery photo, user-provided project information.
 - Published-research archive stays empty until an actual publication is confirmed.
 
+## Phase 3: private content management system
+
+The code now includes a **private `/control-center`** to update project/research cards, blog entries, gallery, experience, credentials, skills, roadmap, profile and résumé links without editing code. It uses a **real Postgres database, one-admin email OTP, short-lived codes and server-side cookies** when configured. Drafts stay private, published records appear on the public site, and hidden items can be restored. The user-approved public layout is not redesigned.
+
+You **must** configure the database and email sender before using the admin interface; the project intentionally includes no sample login, fake OTP or live credentials. Media uploads additionally require a configured Supabase Storage bucket. Detailed setup and security testing steps: **`docs/PHASE3_SETUP.md`**. Current tested/unverified status: **`docs/PHASE3_STATUS.md`**.
+
+This is **source code only**; no GitHub Pages build or deployment workflow is included. GitHub Pages does not execute these server-side APIs. The eventual deployment must support Next.js server routes.
+
 ## Preview without installing packages
 
 Open `preview.html` in a browser for an interactive **offline design preview** (Home, Work, Blogs and About), or inspect `docs/previews/desktop-preview.png` and `docs/previews/mobile-preview.png`. This is a snapshot companion to the actual React source, not proof that the Next.js production build works.
 
 ## Run locally
 
-Requires Node.js 20.9+ and npm access.
+Requires Node.js 22+ and npm registry access. (See `.env.example` / `docs/PHASE3_SETUP.md` for CMS configuration.)
 
 ```bash
 npm install
@@ -29,6 +37,7 @@ Open **http://localhost:3000**. Build/check:
 ```bash
 npm run typecheck
 npm run test:content
+npm run test:cms
 npm run build
 npm run start
 ```
@@ -67,11 +76,11 @@ scripts/
 docs/              # Design lock, audit, status
 ```
 
-**Phase 3 is not yet implemented:** The private CMS/database/email OTP will be built later. The current frontend deliberately reads typed content modules to make the transition straightforward.
+**Phase 3 source is implemented:** It includes `app/control-center`, server-side `app/api/admin/*`, `db/schema.sql`, `lib/cms-*`, content validation, media endpoint, and unit tests. Your public notebook uses published database content over the original résumé-backed defaults. Actual cloud services and production runtime verification are not yet configured.
 
 ## Privacy
 
-The PDF contains contact details from the user's original résumé. Review it before publishing to the open internet. The website itself does not print a phone number. No API keys, private data, fabricated papers or credentials are embedded.
+The PDF contains contact details from the user's original résumé. Review it before publishing to the open internet. The website itself does not print a phone number. No API keys, actual OTP codes, fabricated papers, or fabricated credentials are embedded. The `.env.example` file contains placeholders, not real secrets.
 
 ## Accessibility checklist
 

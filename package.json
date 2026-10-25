@@ -1,19 +1,22 @@
 {
   "name": "student-blackboard-portfolio",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "test:content": "node scripts/check-content.mjs"
+    "test:content": "node scripts/check-content.mjs",
+    "test:cms": "node --test tests/cms-core.test.mjs"
   },
   "dependencies": {
     "next": "^16.0.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "motion": "^12.0.0"
+    "motion": "^12.0.0",
+    "pg": "^8.13.1",
+    "server-only": "^0.0.1"
   },
   "devDependencies": {
     "typescript": "^5.9.0",
@@ -21,6 +24,7 @@
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "tailwindcss": "^4.0.0",
-    "@tailwindcss/postcss": "^4.0.0"
+    "@tailwindcss/postcss": "^4.0.0",
+    "@types/pg": "^8.11.10"
   }
 }

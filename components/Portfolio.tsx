@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
-import { achievements, credentials, experiences, profile, roadmap, skills } from '@/content/site';
-import { workItems, type WorkCategory, type WorkItem } from '@/content/work';
-import { blogPosts } from '@/content/blogs';
+import { defaultPortfolio, type PortfolioData } from '@/lib/cms-schema';
+import { type WorkCategory, type WorkItem } from '@/content/work';
+const ContentContext = createContext<PortfolioData>(defaultPortfolio());
+const useContent = () => useContext(ContentContext);
 
 type Page = 'home'|'work'|'blogs'|'about';
 type Filter = 'all'|WorkCategory;
@@ -71,10 +71,11 @@ function Intro({enter}:{enter:()=>void}){
 }
 
 function Home({navigate,openWork}:{navigate:(page:Page)=>void;openWork:(category:Filter)=>void}){
+ const {profile,experiences,achievements}=useContent();
  const [experienceIndex,setExperienceIndex]=useState(0);
- const experience=experiences[experienceIndex];
+ const experience=experiences[experienceIndex] || {role:'',organization:'',description:'',period:'',kind:'Internship' as const};
  const reduced=useReducedMotion();
- function changeExperience(direction:number){setExperienceIndex(n=>(n+direction+experiences.length)%experiences.length)}
+ function changeExperience(direction:number){if(experiences.length)setExperienceIndex(n=>(n+direction+experiences.length)%experiences.length)}
  return <>
   <section className="hero notebook-grid" aria-labelledby="home-heading">
    <div className="hero-text"><div className="eyebrow">01 / MEET THE STUDENT</div>
@@ -83,7 +84,7 @@ function Home({navigate,openWork}:{navigate:(page:Page)=>void;openWork:(category
     <div className="hero-actions"><a className="outline-action primary" href={profile.resume} target="_blank" rel="noopener noreferrer">VIEW CV ↗</a><a className="outline-action" href={profile.resume} download="Shanmukh_Datta_Resume.pdf">DOWNLOAD CV ↓</a></div>
     <span className="scribble hero-hint">↓ take a look at my work</span>
    </div>
-   <div className="hero-portrait"><Image src={profile.portrait} alt="Shanmukh standing in front of an ornate building" fill priority sizes="(max-width: 700px) 42vw, (max-width: 1080px) 39vw, 380px" className="hero-image"/>
+   <div className="hero-portrait"><img src={profile.portrait} alt="Shanmukh standing in front of an ornate building" className="hero-image content-image-fill"/>
     <span className="portrait-note scribble">that's me ↑</span>
    </div>
   </section>
@@ -118,6 +119,7 @@ function Home({navigate,openWork}:{navigate:(page:Page)=>void;openWork:(category
 }
 
 function Work({selectedFilter,setSelectedFilter,onSelect}:{selectedFilter:Filter;setSelectedFilter:(f:Filter)=>void;onSelect:(item:WorkItem)=>void}){
+ const {workItems}=useContent();
  const [researchStatus,setResearchStatus]=useState<'ongoing'|'published'>('ongoing');
  const filtered=workItems.filter(w=>(selectedFilter==='all'||w.category===selectedFilter) && (w.category!=='research'||selectedFilter==='all'||w.publicationStatus===researchStatus));
  return <section className="paper-section notebook-grid content-page" aria-labelledby="work-heading">
@@ -131,13 +133,13 @@ function Work({selectedFilter,setSelectedFilter,onSelect}:{selectedFilter:Filter
  </section>;
 }
 
-function Blogs(){return <section className="paper-section notebook-grid content-page" aria-labelledby="blogs-heading"><div className="eyebrow">03 / PAGES FROM THE NOTEBOOK</div><h1 id="blogs-heading" className="page-title">Thoughts & scribbles ✎</h1>
+function Blogs(){const {blogPosts}=useContent();return <section className="paper-section notebook-grid content-page" aria-labelledby="blogs-heading"><div className="eyebrow">03 / PAGES FROM THE NOTEBOOK</div><h1 id="blogs-heading" className="page-title">Thoughts & scribbles ✎</h1>
   {blogPosts.length?<div className="work-grid">{blogPosts.map(post=><article key={post.slug} className="work-paper paper-color-0"><span className="paper-tag">{post.category} · {post.date}</span><h2>{post.title}</h2><p>{post.description}</p><p>{post.body}</p></article>)}</div>:<div className="empty-paper blog-empty"><span className="scribble">dear notebook...</span><h2>Pages are being written.</h2><p>No published blog posts have been provided yet. This space is ready for your articles, engineering notes and research reflections once you choose to publish them.</p></div>}
  </section>}
 
-function About(){return <section className="paper-section notebook-grid content-page about-page" aria-labelledby="about-heading">
+function About(){const {profile,experiences,skills,credentials,roadmap}=useContent();return <section className="paper-section notebook-grid content-page about-page" aria-labelledby="about-heading">
   <div className="eyebrow">04 / BEYOND THE CODE</div><h1 id="about-heading" className="page-title">A little about me.</h1><p className="about-lead">{profile.introduction} This page is my scrapbook: my photographs, education, experiences, interests and future plans.</p>
-  <section className="about-subsection" aria-labelledby="gallery-heading"><h2 id="gallery-heading" className="scribble">My gallery ↘</h2><div className="gallery-grid">{profile.gallery.map(photo=><figure key={photo.src} className="gallery-photo"><div className="gallery-frame"><Image src={photo.src} alt={photo.alt} fill sizes="(max-width: 700px) 85vw, 420px" className="gallery-image"/></div><figcaption>{photo.caption}</figcaption></figure>)}</div></section>
+  <section className="about-subsection" aria-labelledby="gallery-heading"><h2 id="gallery-heading" className="scribble">My gallery ↘</h2><div className="gallery-grid">{profile.gallery.map(photo=><figure key={photo.src} className="gallery-photo"><div className="gallery-frame"><img src={photo.src} alt={photo.alt} className="gallery-image content-image-fill"/></div><figcaption>{photo.caption}</figcaption></figure>)}</div></section>
   <section className="about-subsection" aria-labelledby="education-heading"><h2 id="education-heading" className="scribble">Education / the classroom</h2><div className="shelf"><div><h3>{profile.school}</h3><p>{profile.degree}<br/>Minor: {profile.minor}<br/>{profile.years}</p></div><div><h3>Subjects in my notebook</h3><p>Data Structures · Operating Systems · Computer Networks · DBMS · OOP · Machine Learning · Probability & Statistics</p></div></div></section>
   <section className="about-subsection" aria-labelledby="experience-heading"><h2 id="experience-heading" className="scribble">Experience / lines from my journey</h2><div className="timeline">{experiences.map(item=><div key={item.role} className="timeline-item"><strong>{item.role}</strong><p>{item.organization}</p><small>{item.period}</small></div>)}</div></section>
   <section className="about-subsection" aria-labelledby="skills-heading"><h2 id="skills-heading" className="scribble">My toolbox / skills</h2><div className="skill-groups">{skills.map(group=><div key={group.group}><h3>{group.group}</h3><div className="tag-row">{group.items.map(item=><span className="tag" key={item}>{item}</span>)}</div></div>)}</div></section>
@@ -146,9 +148,9 @@ function About(){return <section className="paper-section notebook-grid content-
   <section className="about-subsection"><h2 className="scribble">Want to say hello?</h2><p className="about-lead">I’m open to conversations about engineering, open source and research.</p><a className="outline-action primary" href={`mailto:${profile.email}`}>SEND AN EMAIL ↗</a></section>
  </section>}
 
-function Footer(){return <footer className="page-footer"><div><span className="eyebrow">A NOTE BEFORE YOU GO</span><h2>Stop doing.<br/><span>Start doing. ↗</span></h2><a className="email-link" href={`mailto:${profile.email}`}>✉ {profile.email}</a></div><div><span className="eyebrow social-heading">CONNECT / TRAFFIC LIGHT</span><div className="traffic-lights"><a href={profile.github} target="_blank" rel="noopener noreferrer" className="light red-light" aria-label="GitHub (opens in new tab)">GH</a><a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="light yellow-light" aria-label="LinkedIn (opens in new tab)">in</a><a href={`mailto:${profile.email}`} className="light green-light" aria-label="Send Shanmukh an email">@</a></div></div></footer>}
+function Footer(){const {profile}=useContent();return <footer className="page-footer"><div><span className="eyebrow">A NOTE BEFORE YOU GO</span><h2>Stop doing.<br/><span>Start doing. ↗</span></h2><a className="email-link" href={`mailto:${profile.email}`}>✉ {profile.email}</a></div><div><span className="eyebrow social-heading">CONNECT / TRAFFIC LIGHT</span><div className="traffic-lights"><a href={profile.github} target="_blank" rel="noopener noreferrer" className="light red-light" aria-label="GitHub (opens in new tab)">GH</a><a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="light yellow-light" aria-label="LinkedIn (opens in new tab)">in</a><a href={`mailto:${profile.email}`} className="light green-light" aria-label="Send Shanmukh an email">@</a></div></div></footer>}
 
-export default function Portfolio(){
+export default function Portfolio({initialContent}:{initialContent:PortfolioData}){
  const [intro,setIntro]=useState(true);
  const [page,setPage]=useState<Page>('home');
  const [filter,setFilter]=useState<Filter>('all');
@@ -159,7 +161,7 @@ export default function Portfolio(){
  function enter(){setIntro(false);try{window.sessionStorage.setItem('student-blackboard-intro-seen','1')}catch{}}
  function navigate(next:Page){setPage(next);window.scrollTo({top:0,behavior:'auto'});window.setTimeout(()=>mainRef.current?.focus(),0)}
  function openWork(next:Filter){setFilter(next);navigate('work')}
- return <div className="site-outer"><div className="portfolio-frame"><header className="site-header"><span className="brand">✳ MY NOTEBOOK / PORTFOLIO</span><span className="year">CLASS OF IDEAS · 2026</span><button className="replay" type="button" onClick={()=>setIntro(true)} aria-label="Replay multilingual introduction">↺ INTRO</button></header>
+ return <ContentContext.Provider value={initialContent}><div className="site-outer"><div className="portfolio-frame"><header className="site-header"><span className="brand">✳ MY NOTEBOOK / PORTFOLIO</span><span className="year">CLASS OF IDEAS · 2026</span><button className="replay" type="button" onClick={()=>setIntro(true)} aria-label="Replay multilingual introduction">↺ INTRO</button></header>
    {intro?<Intro enter={enter}/>:<>
     <nav className="main-nav" aria-label="Main navigation">{(['home','work','blogs','about'] as const).map((id,i)=><button type="button" key={id} className={`nav-box nav-${i}`} aria-current={page===id?'page':undefined} onClick={()=>navigate(id)}>{id==='about'?'About Me':id}</button>)}</nav>
     <main id="content" tabIndex={-1} ref={mainRef}><AnimatePresence mode="wait" initial={false}>
@@ -170,5 +172,5 @@ export default function Portfolio(){
    </>}
   </div>
   <AnimatePresence>{opened&&<ProjectDialog item={opened} onClose={()=>setOpened(null)}/>}</AnimatePresence>
-  </div>;
+  </div></ContentContext.Provider>;
 }
