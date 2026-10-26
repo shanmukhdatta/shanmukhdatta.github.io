@@ -1,8 +1,8 @@
 # Phase 4 — Automated verification report
 
-**Source verified:** `56ccf0d8c96a7995c9b9695f2a352d76c70908ca` on `main`
-**GitHub Actions run:** https://github.com/shanmukhdatta/shanmukhdatta.github.io/actions/runs/40266326640
-**Result:** Both jobs completed successfully on GitHub's Ubuntu runners.
+**Latest verified source:** `fda1b0b0c73f0bfd88fbc8129eebcb638fc0cb92` on `main`
+**Latest GitHub Actions run:** https://github.com/shanmukhdatta/shanmukhdatta.github.io/actions/runs/40267121320
+**Result:** All three jobs passed: production build/smoke, PostgreSQL+mock OTP integration, and real-browser verification.
 
 ## CI: production build and no-credentials smoke tests
 
@@ -38,13 +38,26 @@ Verified in the running production-mode Next.js server:
 14. Uploading without configured storage fails closed.
 15. Logging out invalidates the session.
 
+## CI: real Chromium browser verification
+
+The Next.js production server was launched without private credentials and tested with Playwright Chromium at desktop (1280 × 900) and mobile (390 × 844) widths. Checks passed for:
+
+- Correct hero photo loading, with photo to the right of the introduction and no horizontal overflow at either tested width.
+- Résumé download link and interactive green internship/experience carousel.
+- Research filters and empty Published archive (no false publication claims).
+- Keyboard activation and Escape-to-dismiss project detail dialog.
+- About and Blogs navigation/content.
+- No browser JavaScript errors, including in the reduced-motion setting.
+
+The first browser run discovered a reduced-motion welcome hydration mismatch (React error #418). The source was corrected using an SSR-safe mount flag in the multilingual introduction, then all browser tests passed.
+
 ## Remaining gates before production readiness
 
 - Configure a **real hosted PostgreSQL** instance, perform migrations as a privileged operator, and confirm backups and database TLS.
 - Set real administrator email and strong `OTP_PEPPER` in the server's private environment.
 - Verify **real Resend delivery**, sender-domain verification, OTP expiry/rate-limit behavior, and cross-browser cookie handling on an HTTPS deployment.
 - If uploads are required, configure and test **Supabase Storage** against image/PDF file and access rules.
-- Run browser end-to-end/accessibility checks on the **actual Next.js site**, including mobile portrait placement, keyboard operation, screen readers and zoom.
+- Browser desktop/mobile layout and selected keyboard interactions pass in CI. Full WCAG accessibility audits, assistive-technology/screen-reader testing, and additional device breakpoints remain.
 - Audit personal information in the résumé before public exposure.
 - Establish a reproducible `package-lock.json` and switch from `npm install` to `npm ci` in CI.
 - Deploy only with explicit instruction. GitHub Pages cannot run these server APIs.
