@@ -108,6 +108,8 @@ export default function ControlCenter(){
   setMediaBusy(true);setNotice('');
   try{
    const form=new FormData();form.append('file',file);
+   if(editing?.kind)form.append('kind',editing.kind);
+   if(key==='resume'||key==='resumeUrl')form.append('kind','resume');
    const response=await fetch('/api/admin/media',{method:'POST',body:form,credentials:'same-origin'});
    const data=await response.json();if(!response.ok)throw Error(data.error||'Upload failed');
    updateField(key,data.url);setNotice('Upload complete. Save and publish this entry to make the change public.');

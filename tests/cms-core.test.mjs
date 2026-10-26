@@ -1,14 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
-import {mkdtempSync,rmSync} from 'node:fs';
+import {existsSync, mkdtempSync, rmSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join,resolve} from 'node:path';
 import {createRequire} from 'node:module';
 const root=resolve(import.meta.dirname,'..');
 const temp=mkdtempSync(join(tmpdir(),'cms-test-'));
 // The schema is deliberately self-contained and can be tested even without npm access.
-execFileSync('tsc',['--pretty','false','--target','es2022','--module','commonjs','--moduleResolution','node','--esModuleInterop','--skipLibCheck','--strict','--outDir',temp,'lib/cms-schema.ts','content/site.ts','content/work.ts','content/blogs.ts'],{cwd:root,stdio:'pipe'});
+const localTsc=join(root,'node_modules/typescript/bin/tsc');
+const [tscBin,prefixArgs]=existsSync(localTsc)?[process.execPath,[localTsc]]:['tsc',[]];
+execFileSync(tscBin,[...prefixArgs,'--pretty','false','--target','es2022','--module','commonjs','--moduleResolution','node','--esModuleInterop','--skipLibCheck','--strict','--outDir',temp,'lib/cms-schema.ts','content/site.ts','content/work.ts','content/blogs.ts'],{cwd:root,stdio:'pipe'});
 const req=createRequire(import.meta.url);
 const cms=req(join(temp,'lib/cms-schema.js'));
 test.after(()=>rmSync(temp,{recursive:true,force:true}));

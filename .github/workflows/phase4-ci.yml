@@ -29,8 +29,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Install dependencies (no lockfile exists yet)
-        run: npm install --no-audit --no-fund
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
       - name: Check content and assets
         run: npm run test:content
       - name: Test CMS rules
@@ -75,7 +75,7 @@ jobs:
         with:
           node-version: '22'
       - name: Install dependencies
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
       - name: Build production application
         run: npm run build
       - name: Run isolated CMS integration tests
@@ -100,7 +100,7 @@ jobs:
         with:
           node-version: '22'
       - name: Install dependencies
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
       - name: Install test-only Playwright
         run: npm install --no-save --no-audit --no-fund playwright@1.56.1
       - name: Install browser and dependencies

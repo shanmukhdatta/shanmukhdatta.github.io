@@ -1,12 +1,31 @@
 import 'server-only';
 import { Pool, type PoolClient } from 'pg';
 import type { ContentRecord } from './cms-schema';
-let pool:Pool|undefined;
+declare global {
+ // eslint-disable-next-line no-var
+ var __portfolio_pg_pool: Pool | undefined;
+}
+
 export function dbReady(){return Boolean(process.env.DATABASE_URL)}
+
+function createPool(): Pool {
+ const connectionString = process.env.DATABASE_URL!;
+ const isLocal = /localhost|127\.0\.0\.1/.test(connectionString);
+ return new Pool({
+  connectionString,
+  max: 4,
+  connectionTimeoutMillis: 5000,
+  idleTimeoutMillis: 30000,
+  ssl: isLocal ? false : { rejectUnauthorized: false },
+ });
+}
+
 export function db():Pool{
  if(!process.env.DATABASE_URL)throw new Error('DATABASE_URL is not configured');
- if(!pool)pool=new Pool({connectionString:process.env.DATABASE_URL,max:5,connectionTimeoutMillis:4000,idleTimeoutMillis:30000});
- return pool;
+ if(!globalThis.__portfolio_pg_pool){
+  globalThis.__portfolio_pg_pool = createPool();
+ }
+ return globalThis.__portfolio_pg_pool;
 }
 export async function loadChanges():Promise<ContentRecord[]>{
  if(!dbReady())return [];

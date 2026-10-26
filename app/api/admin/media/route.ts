@@ -21,7 +21,18 @@ export async function POST(req:NextRequest){
   const webp=String.fromCharCode(...bytes.slice(0,4))==='RIFF'&&String.fromCharCode(...bytes.slice(8,12))==='WEBP';
   const pdf=String.fromCharCode(...bytes.slice(0,5))==='%PDF-';
   if(!({ 'image/jpeg':jpg,'image/png':png,'image/webp':webp,'application/pdf':pdf }[file.type]))return json({error:'File bytes do not match the declared type'},400);
-  const path=`portfolio/${randomUUID()}.${spec.ext}`;
+  const folderParam=form.get('folder')||form.get('kind');
+  let subfolder='portfolio';
+  if(typeof folderParam==='string'){
+   const norm=folderParam.toLowerCase();
+   if(norm==='profile')subfolder='profile';
+   else if(norm==='gallery')subfolder='gallery';
+   else if(norm==='projects'||norm==='work')subfolder='projects';
+   else if(norm==='research')subfolder='research';
+   else if(norm==='credential'||norm==='credentials')subfolder='credentials';
+   else if(norm==='resume')subfolder='resume';
+  }
+  const path=`${subfolder}/${randomUUID()}.${spec.ext}`;
   const api=`${base.replace(/\/$/,'')}/storage/v1/object/${encodeURIComponent(bucket)}/${path}`;
   const response=await fetch(api,{method:'POST',headers:{Authorization:`Bearer ${serviceKey}`,apikey:serviceKey,'Content-Type':file.type,'x-upsert':'false'},body:bytes,cache:'no-store'});
   if(!response.ok){console.error('Media storage rejected upload',response.status);return json({error:'Storage upload failed'},502)}

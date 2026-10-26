@@ -12,8 +12,17 @@ const configured=()=>Boolean(process.env.DATABASE_URL && process.env.OTP_PEPPER 
 export function authReady(){return configured()&&secret().length>=32}
 export function trustedOrigin(req:NextRequest){
  const raw=req.headers.get('origin');if(!raw)return false;
- if(!process.env.APP_ORIGIN)return false;
- try{return new URL(raw).origin===new URL(process.env.APP_ORIGIN).origin}catch{return false}
+ try{
+  const incoming=new URL(raw).origin;
+  if(process.env.APP_ORIGIN){
+   const candidates=process.env.APP_ORIGIN.split(',').map(s=>s.trim()).filter(Boolean);
+   if(candidates.some(c=>{
+    try{return new URL(c).origin===incoming}catch{return false}
+   })) return true;
+  }
+  if(process.env.VERCEL_URL && incoming===`https://${process.env.VERCEL_URL}`) return true;
+  return false;
+ }catch{return false}
 }
 function clientKey(req:NextRequest){
  // E-mail-scoped throttling remains authoritative; IP throttling is supplementary (proxy headers can vary).
