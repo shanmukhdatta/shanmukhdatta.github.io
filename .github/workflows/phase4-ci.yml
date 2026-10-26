@@ -84,7 +84,8 @@ jobs:
   browser:
     name: Real browser desktop/mobile checks
     needs: verify
-    runs-on: ubuntu-latest
+    # Playwright 1.56 supports Ubuntu 24.04; ubuntu-latest may now be 26.04.
+    runs-on: ubuntu-24.04
     timeout-minutes: 25
     permissions:
       contents: read
