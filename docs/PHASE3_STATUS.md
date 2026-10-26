@@ -12,6 +12,7 @@
 - [x] Real starter content without invented achievements or publications
 - [x] Passing Next.js production build and content/type/unit checks in CI
 - [x] Passing isolated PostgreSQL + mock Resend OTP + CMS publish/hide flow in CI
+- [x] Passing desktop and mobile Chromium checks of the actual Next.js production site, including hero photo position, filters, keyboard dialogs and reduced-motion hydration
 - [x] No automated site deployment added
 
 ## Still requires real service accounts and final checks
@@ -20,7 +21,7 @@
 - [ ] Configure administrator email and verified real Resend sender
 - [ ] Verify real OTP delivery and authentication end-to-end over HTTPS
 - [ ] Configure and test external media storage if uploads are needed
-- [ ] Run full browser, mobile and accessibility testing on the actual application
+- [ ] Complete deeper accessibility/assistive technology and more device-size testing on the actual application
 - [ ] Deploy only when explicitly requested
 
 **Test evidence:** [Phase 4 verified CI report](PHASE4_TEST_REPORT.md).
