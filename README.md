@@ -17,7 +17,7 @@ The code now includes a **private `/control-center`** to update project/research
 
 You **must** configure the database and email sender before using the admin interface; the project intentionally includes no sample login, fake OTP or live credentials. Media uploads additionally require a configured Supabase Storage bucket. Detailed setup and security testing steps: **`docs/PHASE3_SETUP.md`**. Current tested/unverified status: **`docs/PHASE3_STATUS.md`**.
 
-This is **source code only**; no GitHub Pages build or deployment workflow is included. GitHub Pages does not execute these server-side APIs. The eventual deployment must support Next.js server routes.
+This is **source code only**; no GitHub Pages build or deployment workflow is included. GitHub Pages does not execute these server-side APIs. Deploy the full application to Vercel following **`docs/DEPLOYMENT_GUIDE.md`** and **`docs/PRODUCTION_CHECKLIST.md`**.
 
 ## Preview without installing packages
 
