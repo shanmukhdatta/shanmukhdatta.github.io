@@ -1,18 +1,28 @@
-# Phase 3 implementation checklist
+# Phase 3 — Implementation and verification status
 
-- [x] Backend API for request/verify OTP, admin session, logout
-- [x] HTTP-only SameSite session cookie and per-request authorization
-- [x] Database schema for records, OTPs, sessions, rate limits
-- [x] Published/draft/hidden public content projection, built-in merge support
-- [x] Private Control Center form for all approved content types
-- [x] Gallery and résumé upload API using optional external storage
-- [x] Research published-paper guard requiring venue and paper link
-- [x] Source-backed default content; no invented achievements or publications
-- [x] No new GitHub Pages workflow or deployment
-- [ ] Connect live DATABASE_URL / ADMIN_EMAIL / RESEND credentials (user-controlled)
-- [ ] Configure external storage credentials if media uploads are wanted
-- [ ] End-to-end Next.js runtime / DB / OTP / email tests with real providers
-- [ ] Run a Next.js production build after npm connectivity is available
-- [ ] Publish to a serverless-compatible host when requested
+## Implemented and verified by GitHub Actions
 
-**This phase is code-complete as a scaffold; production readiness is not yet verified.**
+- [x] Backend API for request/verify OTP, admin session and logout
+- [x] HTTP-only, SameSite=Strict session cookie and per-request authorization
+- [x] PostgreSQL schema for records, OTPs, sessions and rate limits
+- [x] Published/draft/hidden content handling with source-backed merge support
+- [x] Private Control Center forms for the approved content types
+- [x] Optional media upload API; rejects uploads without storage configuration
+- [x] Published-paper metadata validation
+- [x] Real starter content without invented achievements or publications
+- [x] Passing Next.js production build and content/type/unit checks in CI
+- [x] Passing isolated PostgreSQL + mock Resend OTP + CMS publish/hide flow in CI
+- [x] No automated site deployment added
+
+## Still requires real service accounts and final checks
+
+- [ ] Configure hosted PostgreSQL, TLS and backup policy
+- [ ] Configure administrator email and verified real Resend sender
+- [ ] Verify real OTP delivery and authentication end-to-end over HTTPS
+- [ ] Configure and test external media storage if uploads are needed
+- [ ] Run full browser, mobile and accessibility testing on the actual application
+- [ ] Deploy only when explicitly requested
+
+**Test evidence:** [Phase 4 verified CI report](PHASE4_TEST_REPORT.md).
+
+**Status:** Source and isolated database/authentication integration pass on GitHub Actions. Production integrations remain unverified until their private credentials and services are configured.
