@@ -42,7 +42,7 @@ npm run build
 npm run start
 ```
 
-> **Important:** The source was generated in a network-restricted workspace. The npm dependency installation and complete Next.js runtime/build could **not** be tested there. See `docs/PHASE2_STATUS.md`.
+> **Verified in GitHub Actions:** Dependencies install, nine CMS unit tests, TypeScript, production build, unauthenticated smoke tests, and isolated PostgreSQL/mock OTP CMS end-to-end tests pass. See `docs/PHASE4_TEST_REPORT.md`. Real email, real hosted DB, and media storage remain unconfigured.
 
 ## How to update your actual information
 
@@ -76,7 +76,7 @@ scripts/
 docs/              # Design lock, audit, status
 ```
 
-**Phase 3 source is implemented:** It includes `app/control-center`, server-side `app/api/admin/*`, `db/schema.sql`, `lib/cms-*`, content validation, media endpoint, and unit tests. Your public notebook uses published database content over the original résumé-backed defaults. Actual cloud services and production runtime verification are not yet configured.
+**Phase 3 source is implemented:** It includes `app/control-center`, server-side `app/api/admin/*`, `db/schema.sql`, `lib/cms-*`, content validation, media endpoint, and unit tests. Your public notebook uses published database content over the original résumé-backed defaults. The production build and isolated PostgreSQL/mock-email integration tests are verified in GitHub Actions; actual cloud services and production hosting are not yet configured.
 
 ## Privacy
 
