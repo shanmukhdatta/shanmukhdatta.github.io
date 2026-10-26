@@ -41,3 +41,42 @@ jobs:
         run: npm run build
       - name: Smoke-test the built site without credentials
         run: node scripts/ci-smoke.mjs
+
+  integration:
+    name: PostgreSQL and mocked email API integration
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: local-ci-only-password
+          POSTGRES_DB: portfolio_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d portfolio_ci"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 12
+    env:
+      CI: 'true'
+      NEXT_TELEMETRY_DISABLED: '1'
+      CI_DATABASE_URL: postgresql://postgres:local-ci-only-password@127.0.0.1:5432/portfolio_ci
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Build production application
+        run: npm run build
+      - name: Run isolated CMS integration tests
+        run: node scripts/ci-cms-integration.mjs
