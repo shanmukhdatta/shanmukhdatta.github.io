@@ -56,9 +56,9 @@ The approved public Student's Blackboard design is unchanged. The new private co
 - Configure DB maintenance to prune expired `cms_login_codes`/`cms_sessions` and old `cms_rate_limits` rows.
 - Take and test regular database backups; use production TLS and a least-privilege Postgres user.
 
-## Testing completed in this sandbox
+## Verified tests and remaining live-provider checks
 
-- Pure content schema and merge/publish/hidden tests can run without npm; see `npm run test:cms`.
-- Source syntax is checked with the globally installed TypeScript transpiler.
-- Existing Phase 2 offline desktop/mobile preview can still be tested independently.
-- **Not tested:** Next.js runtime, Postgres queries against a live database, real Resend delivery, Supabase Storage, deployed authentication or production build. npm registry is inaccessible from this sandbox, so these are explicitly left for deployment validation.
+- Passing GitHub Actions production build, content tests, nine CMS unit tests, and unauthenticated Next.js server smoke checks.
+- Passing integration tests using disposable PostgreSQL 16 and locally intercepted Resend, covering OTP authorization, sessions, drafts, publishing, hiding, and logout. Read `docs/PHASE4_TEST_REPORT.md` for exact results and run link.
+- Not yet tested: real Resend email delivery, deployed HTTPS/OTP, hosted PostgreSQL, Supabase Storage uploads, actual-browser accessibility and mobile tests.
+- This is source/CI verification only. **Do not treat the CMS as live or production-ready until real service configuration and tests pass.**
