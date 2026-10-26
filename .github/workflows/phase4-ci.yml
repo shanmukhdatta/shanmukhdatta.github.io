@@ -80,3 +80,31 @@ jobs:
         run: npm run build
       - name: Run isolated CMS integration tests
         run: node scripts/ci-cms-integration.mjs
+
+  browser:
+    name: Real browser desktop/mobile checks
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+    env:
+      CI: 'true'
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Install test-only Playwright
+        run: npm install --no-save --no-audit --no-fund playwright@1.56.1
+      - name: Install browser and dependencies
+        run: npx playwright install --with-deps chromium
+      - name: Build Next.js for production
+        run: npm run build
+      - name: Verify desktop and mobile interactions
+        run: node scripts/ci-browser-check.mjs
