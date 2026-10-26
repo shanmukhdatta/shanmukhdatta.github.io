@@ -56,7 +56,7 @@ async function requestJson<T>(url:string,init:RequestInit={}):Promise<T>{
 }
 export default function ControlCenter(){
  const [session,setSession]=useState<'checking'|'login'|'authenticated'|'unconfigured'>('checking');
- const [email,setEmail]=useState('');const [code,setCode]=useState('');
+ const [email,setEmail]=useState('shanmukhdatta69@gmail.com');const [code,setCode]=useState('');const [codeSent,setCodeSent]=useState(false);
  const [notice,setNotice]=useState('');const [busy,setBusy]=useState(false);
  const [kind,setKind]=useState<ContentKind>('work');const [records,setRecords]=useState<ContentRecord[]>([]);
  const [editing,setEditing]=useState<ContentRecord|null>(null);const [draft,setDraft]=useState<Record<string,unknown>>({});
@@ -73,7 +73,7 @@ export default function ControlCenter(){
   return ()=>{cancelled=true};
  },[load]);
  async function execute(action:()=>Promise<void>){setBusy(true);setNotice('');try{await action()}catch(e){setNotice(e instanceof Error?e.message:'Request failed')}finally{setBusy(false)}}
- async function requestOtp(){await execute(async()=>{const data=await requestJson<{message:string}>('/api/admin/auth/request-code',{method:'POST',body:JSON.stringify({email})});setNotice(data.message)})}
+ async function requestOtp(){await execute(async()=>{const data=await requestJson<{message:string}>('/api/admin/auth/request-code',{method:'POST',body:JSON.stringify({email})});setCodeSent(true);setNotice(data.message)})}
  async function verifyOtp(){await execute(async()=>{await requestJson('/api/admin/auth/verify-code',{method:'POST',body:JSON.stringify({email,code})});setCode('');setSession('authenticated');await load();setNotice('Signed in.')})}
  async function logout(){await execute(async()=>{await requestJson('/api/admin/auth/logout',{method:'POST',body:'{}'});setSession('login');setEditing(null);setRecords([]);setNotice('Signed out.')})}
  function edit(row:ContentRecord){setEditing(row);setDraft({...row.payload});setEditId(row.id);setPublishStatus(row.status);setNotice('')}
@@ -121,9 +121,22 @@ export default function ControlCenter(){
   {notice&&<div className="cc-notice" role="status">{notice}</div>}
   {session==='checking'&&<div className="cc-section"><p>Checking admin session…</p></div>}
   {session==='unconfigured'&&<div className="cc-section"><h2>Admin system needs setup</h2><p>Configure your database, admin email, OTP secret, email sender, and public application origin. Refer to <code>docs/PHASE3_SETUP.md</code>. No insecure demo login is available.</p></div>}
-  {session==='login'&&<div className="cc-section cc-login"><h2>Sign in with an email code</h2><p>Only the designated portfolio administrator can sign in. Verification codes expire after ten minutes.</p>
-   <form onSubmit={e=>{e.preventDefault();void requestOtp()}}><label>Email address<input type="email" autoComplete="email" required value={email} onChange={e=>setEmail(e.target.value)} placeholder="Your admin email"/></label><button className="outline-action primary" type="submit" disabled={busy}>SEND CODE ↗</button></form>
-   <form onSubmit={e=>{e.preventDefault();void verifyOtp()}}><label>Six-digit email code<input autoComplete="one-time-code" inputMode="numeric" minLength={6} maxLength={6} pattern="[0-9]{6}" value={code} onChange={e=>setCode(e.target.value)} required placeholder="000000"/></label><button className="outline-action" type="submit" disabled={busy}>VERIFY & SIGN IN ↗</button></form>
+  {session==='login'&&<div className="cc-section cc-login"><h2>Sign in to Control Center</h2><p>Admin verification codes are sent directly to your registered administrator address.</p>
+   {!codeSent ? (
+    <form onSubmit={e=>{e.preventDefault();void requestOtp()}}>
+     <label>Administrator email<input type="email" autoComplete="email" required value={email} onChange={e=>setEmail(e.target.value)} placeholder="shanmukhdatta69@gmail.com"/></label>
+     <button className="outline-action primary" type="submit" disabled={busy}>SEND LOGIN CODE ↗</button>
+    </form>
+   ) : (
+    <form onSubmit={e=>{e.preventDefault();void verifyOtp()}}>
+     <p className="cc-help">A 6-digit verification code was sent to <strong>{email}</strong>. It expires in 10 minutes.</p>
+     <label>Six-digit email code<input autoComplete="one-time-code" autoFocus inputMode="numeric" minLength={6} maxLength={6} pattern="[0-9]{6}" value={code} onChange={e=>setCode(e.target.value)} required placeholder="000000"/></label>
+     <div style={{display:'flex',gap:'0.75rem',marginTop:'0.5rem',flexWrap:'wrap'}}>
+      <button className="outline-action primary" type="submit" disabled={busy}>VERIFY & SIGN IN ↗</button>
+      <button type="button" className="outline-action" onClick={()=>setCodeSent(false)} disabled={busy}>RE-SEND CODE</button>
+     </div>
+    </form>
+   )}
   </div>}
   {session==='authenticated'&&<>
    <div className="cc-toolbar"><span className="eyebrow">ADMIN / PUBLISHING DESK</span><button className="outline-action" onClick={()=>void logout()} disabled={busy}>LOG OUT</button></div>
