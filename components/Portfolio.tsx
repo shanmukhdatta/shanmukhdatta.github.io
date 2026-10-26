@@ -55,7 +55,12 @@ function ProjectDialog({item,onClose}:{item:WorkItem;onClose:()=>void}){
 
 function Intro({enter}:{enter:()=>void}){
  const [index,setIndex]=useState(0);
- const reduced=useReducedMotion();
+ const motionPreference=useReducedMotion();
+ // Keep server and first client render identical; media queries are client-only.
+ // This prevents React hydration mismatches for reduced-motion visitors.
+ const [mounted,setMounted]=useState(false);
+ useEffect(()=>setMounted(true),[]);
+ const reduced=mounted && Boolean(motionPreference);
  useEffect(()=>{if(reduced)return;const timer=window.setInterval(()=>setIndex(n=>(n+1)%greetings.length),1200);return ()=>window.clearInterval(timer)},[reduced]);
  return <section className="intro-stage notebook-grid" aria-label="Multilingual portfolio welcome">
    <span className="eyebrow">✦ A LITTLE INTRODUCTION ✦</span>
