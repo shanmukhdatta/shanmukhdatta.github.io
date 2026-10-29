@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
+import { useReducedMotion } from 'motion/react';
 import { defaultPortfolio, type PortfolioData } from '@/lib/cms-schema';
 import { type WorkCategory, type WorkItem } from '@/content/work';
 const ContentContext = createContext<PortfolioData>(defaultPortfolio());
@@ -17,7 +17,6 @@ const greetings = ['నమస్తే!', 'Hello!', 'Bonjour!', 'नमस्त
 
 function ProjectDialog({item,onClose}:{item:WorkItem;onClose:()=>void}){
  const panel=useRef<HTMLDivElement>(null);
- const reduced=useReducedMotion();
  useEffect(()=>{
    const last=document.activeElement as HTMLElement|null;
    panel.current?.focus();
@@ -36,8 +35,8 @@ function ProjectDialog({item,onClose}:{item:WorkItem;onClose:()=>void}){
    document.addEventListener('keydown',key);
    return ()=>{document.removeEventListener('keydown',key);document.body.style.overflow=previous;last?.focus()};
  },[onClose]);
- return <motion.div className="dialog-backdrop" role="presentation" onMouseDown={event=>{if(event.target===event.currentTarget)onClose()}} initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} transition={{duration:reduced?0:0.15}}>
-  <motion.div ref={panel} className="paper-dialog" role="dialog" aria-modal="true" aria-labelledby="dialog-title" tabIndex={-1} initial={{opacity:0,y:reduced?0:16}} animate={{opacity:1,y:0}} exit={{opacity:0,y:reduced?0:10}} transition={{duration:reduced?0:0.2}}>
+ return <div className="dialog-backdrop" role="presentation" onMouseDown={event=>{if(event.target===event.currentTarget)onClose()}} >
+  <div ref={panel} className="paper-dialog" role="dialog" aria-modal="true" aria-labelledby="dialog-title" tabIndex={-1} >
     <div className="dialog-top"><span className="eyebrow">A page from my notebook</span><button className="outline-action compact" onClick={onClose} aria-label="Close project details">✕</button></div>
     <span className="paper-tag">{item.category.replace('-',' ')} · {item.status}</span>
     <h2 id="dialog-title">{item.name}</h2>
@@ -49,8 +48,8 @@ function ProjectDialog({item,onClose}:{item:WorkItem;onClose:()=>void}){
      {item.paper&&<a href={item.paper} target="_blank" rel="noopener noreferrer" className="outline-action">Read paper ↗</a>}
      {!item.github&&!item.live&&!item.paper&&<p className="fineprint">No public artifact link has been verified for this entry yet.</p>}
     </div>
-  </motion.div>
- </motion.div>;
+  </div>
+ </div>;
 }
 
 function Intro({enter}:{enter:()=>void}){
@@ -64,11 +63,7 @@ function Intro({enter}:{enter:()=>void}){
  useEffect(()=>{if(reduced)return;const timer=window.setInterval(()=>setIndex(n=>(n+1)%greetings.length),1200);return ()=>window.clearInterval(timer)},[reduced]);
  return <section className="intro-stage notebook-grid" aria-label="Multilingual portfolio welcome">
    <span className="eyebrow">✦ A LITTLE INTRODUCTION ✦</span>
-   <div className="intro-greeting"><AnimatePresence mode="wait">
-    <motion.span key={reduced?'all':index} initial={{opacity:reduced?1:0,y:reduced?0:10}} animate={{opacity:1,y:0}} exit={{opacity:reduced?1:0,y:reduced?0:-10}} transition={{duration:reduced?0:0.3}}>
-     {reduced?'Namaste · Hello · Bonjour':greetings[index]}
-    </motion.span>
-   </AnimatePresence></div>
+   <div className="intro-greeting"><span>{reduced?'Namaste · Hello · Bonjour':greetings[index]}</span></div>
    <p className="eyebrow intro-caption">WELCOME TO MY SPACE ON THE INTERNET</p>
    <button className="outline-action primary enter-button" onClick={enter}>ENTER MY PORTFOLIO ↗</button>
    <span className="intro-doodle doodle-left" aria-hidden="true">✳</span><span className="intro-doodle doodle-right" aria-hidden="true">↗</span>
@@ -79,7 +74,6 @@ function Home({navigate,openWork}:{navigate:(page:Page)=>void;openWork:(category
  const {profile,experiences,achievements}=useContent();
  const [experienceIndex,setExperienceIndex]=useState(0);
  const experience=experiences[experienceIndex] || {role:'',organization:'',description:'',period:'',kind:'Internship' as const};
- const reduced=useReducedMotion();
  function changeExperience(direction:number){if(experiences.length)setExperienceIndex(n=>(n+direction+experiences.length)%experiences.length)}
  return <>
   <section className="hero notebook-grid" aria-labelledby="home-heading">
@@ -108,12 +102,10 @@ function Home({navigate,openWork}:{navigate:(page:Page)=>void;openWork:(category
   <section className="blackboard" aria-label="Internships and work experience slideshow">
    <span className="eyebrow board-eyebrow">CHALKBOARD / EXPERIENCE LOG</span><h2 className="scribble">Where I've been learning & working ✳</h2>
    <div className="experience-card" aria-live="polite" aria-atomic="true">
-    <AnimatePresence mode="wait">
-     <motion.div key={experienceIndex} initial={{opacity:0,x:reduced?0:12}} animate={{opacity:1,x:0}} exit={{opacity:0,x:reduced?0:-12}} transition={{duration:reduced?0:0.2}} className="experience-inner">
+    <div className="experience-inner">
       <span className="eyebrow board-gold">{String(experienceIndex+1).padStart(2,'0')} / {String(experiences.length).padStart(2,'0')} · {experience.kind.toUpperCase()}</span>
       <h3>{experience.role}</h3><p className="scribble org">{experience.organization}</p><p>{experience.description}</p><span className="eyebrow board-gold">{experience.period}</span>
-     </motion.div>
-    </AnimatePresence>
+     </div>
    </div>
    <div className="experience-controls"><button aria-label="Previous experience" onClick={()=>changeExperience(-1)}>←</button><span className="slide-dots" aria-label={`Experience ${experienceIndex+1} of ${experiences.length}`}>{experiences.map((_,i)=><span key={i} aria-hidden="true">{i===experienceIndex?'●':'○'}</span>)}</span><button aria-label="Next experience" onClick={()=>changeExperience(1)}>→</button></div>
   </section>
@@ -131,9 +123,9 @@ function Work({selectedFilter,setSelectedFilter,onSelect}:{selectedFilter:Filter
   <div className="eyebrow">02 / ASSIGNMENTS, EXPERIMENTS & IDEAS</div><h1 id="work-heading" className="page-title">Things I made<span className="red-dot">.</span></h1><p className="scribble section-subtitle">Organized like subject folders ↘</p>
   <div className="filter-row" role="group" aria-label="Filter work by category">{categories.map(cat=><button key={cat.id} aria-pressed={selectedFilter===cat.id} onClick={()=>setSelectedFilter(cat.id)}>{cat.label}</button>)}</div>
   {selectedFilter==='research'&&<div className="filter-row research-filters" role="group" aria-label="Research publication status"><button aria-pressed={researchStatus==='ongoing'} onClick={()=>setResearchStatus('ongoing')}>✎ Ongoing</button><button aria-pressed={researchStatus==='published'} onClick={()=>setResearchStatus('published')}>✓ Published</button></div>}
-  {filtered.length>0?<div className="work-grid">{filtered.map((item,i)=><motion.button key={item.id} layout className={`work-paper paper-color-${i%4}`} onClick={()=>onSelect(item)} aria-label={`Read details about ${item.name}`} whileHover={{y:-3}} whileTap={{scale:0.99}}>
+  {filtered.length>0?<div className="work-grid">{filtered.map((item,i)=><button key={item.id} className={`work-paper paper-color-${i%4}`} onClick={()=>onSelect(item)} aria-label={`Read details about ${item.name}`}>
    <span className="paper-tag">{item.category.replace('-',' ')} · {item.status}</span><strong>{item.name} ↗</strong><p>{item.summary}</p><small>{item.stack.join(' · ')}</small>
-  </motion.button>)}</div>:<div className="empty-paper"><h2>{selectedFilter==='research'&&researchStatus==='published'?'Published papers archive':'Nothing here yet'}</h2><p>{selectedFilter==='research'&&researchStatus==='published'?'No publications have been verified for this portfolio. When a paper is published, its title, venue, DOI and PDF link can be added here.':'This category will show items when verified content is added.'}</p></div>}
+  </button>)}</div>:<div className="empty-paper"><h2>{selectedFilter==='research'&&researchStatus==='published'?'Published papers archive':'Nothing here yet'}</h2><p>{selectedFilter==='research'&&researchStatus==='published'?'No publications have been verified for this portfolio. When a paper is published, its title, venue, DOI and PDF link can be added here.':'This category will show items when verified content is added.'}</p></div>}
   <p className="fineprint under-cards">Entries distinguish completed, in-development, planned and ongoing research work. Select a paper card for details.</p>
  </section>;
 }
@@ -160,22 +152,21 @@ export default function Portfolio({initialContent}:{initialContent:PortfolioData
  const [page,setPage]=useState<Page>('home');
  const [filter,setFilter]=useState<Filter>('all');
  const [opened,setOpened]=useState<WorkItem|null>(null);
- const reduced=useReducedMotion();
  const mainRef=useRef<HTMLElement|null>(null);
  useEffect(()=>{try{if(window.sessionStorage.getItem('student-blackboard-intro-seen')==='1')setIntro(false)}catch{}},[]);
  function enter(){setIntro(false);try{window.sessionStorage.setItem('student-blackboard-intro-seen','1')}catch{}}
  function navigate(next:Page){setPage(next);window.scrollTo({top:0,behavior:'auto'});window.setTimeout(()=>mainRef.current?.focus(),0)}
  function openWork(next:Filter){setFilter(next);navigate('work')}
- return <ContentContext.Provider value={initialContent}><div className="site-outer"><div className="portfolio-frame"><header className="site-header"><span className="brand">✳ MY NOTEBOOK / PORTFOLIO</span><span className="year">CLASS OF IDEAS · 2026</span><button className="replay" type="button" onClick={()=>setIntro(true)} aria-label="Replay multilingual introduction">↺ INTRO</button></header>
+ return <ContentContext.Provider value={initialContent}><div className="site-outer"><div className="portfolio-frame"><header className="site-header"><span className="brand">✳ SHANMUKH DATTA / PORTFOLIO</span><span className="year">CLASS OF IDEAS · 2026</span><button className="replay" type="button" onClick={()=>setIntro(true)} aria-label="Replay multilingual introduction">↺ INTRO</button></header>
+   {!intro&&<a className="skip-link" href="#content">Skip to main content</a>}
    {intro?<Intro enter={enter}/>:<>
     <nav className="main-nav" aria-label="Main navigation">{(['home','work','blogs','about'] as const).map((id,i)=><button type="button" key={id} className={`nav-box nav-${i}`} aria-current={page===id?'page':undefined} onClick={()=>navigate(id)}>{id==='about'?'About Me':id}</button>)}</nav>
-    <main id="content" tabIndex={-1} ref={mainRef}><AnimatePresence mode="wait" initial={false}>
-      <motion.div key={page} initial={{opacity:reduced?1:0,y:reduced?0:8}} animate={{opacity:1,y:0}} exit={{opacity:reduced?1:0,y:reduced?0:-8}} transition={{duration:reduced?0:0.17}}>
+    <main id="content" tabIndex={-1} ref={mainRef}><div className="page-body" key={page}>
         {page==='home'?<Home navigate={navigate} openWork={openWork}/>:page==='work'?<Work selectedFilter={filter} setSelectedFilter={setFilter} onSelect={setOpened}/>:page==='blogs'?<Blogs/>:<About/>}
-      </motion.div>
-    </AnimatePresence></main><Footer/>
+      </div>
+</main><Footer/>
    </>}
   </div>
-  <AnimatePresence>{opened&&<ProjectDialog item={opened} onClose={()=>setOpened(null)}/>}</AnimatePresence>
+  {opened&&<ProjectDialog item={opened} onClose={()=>setOpened(null)}/>}
   </div></ContentContext.Provider>;
 }
