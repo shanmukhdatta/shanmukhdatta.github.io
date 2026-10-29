@@ -23,7 +23,7 @@ try{
   }
   assert.ok(ready,'Next.js not ready: '+output);
   browser=await chromium.launch({headless:true});
-  for(const [name,width,height] of [['desktop',1280,900],['mobile',390,844]]){
+  for(const [name,width,height] of [['desktop',1280,900],['mobile',390,844],['compact-mobile',360,780]]){
     const context=await browser.newContext({viewport:{width,height},reducedMotion:'reduce'});
     const page=await context.newPage();const exceptions=[];
     page.on('pageerror',error=>exceptions.push(error.message));
@@ -32,6 +32,16 @@ try{
     await entry.waitFor({state:'visible'});
     await entry.click();
     await page.locator('.hero-image').waitFor({state:'visible'});
+    assert.match(await page.locator('.brand').innerText(),/SHANMUKH DATTA/i,'Portfolio brand should be personalized');
+    const skip=page.getByRole('link',{name:'Skip to main content'});
+    assert.equal(await skip.getAttribute('href'),'#content','Skip link should target main');
+    await skip.focus();
+    assert.equal(await skip.evaluate(el=>document.activeElement===el),true,'Skip link must be keyboard focusable');
+    const nav=page.getByRole('navigation',{name:'Main navigation'});
+    assert.equal(await nav.getByRole('button',{name:'Home'}).getAttribute('aria-current'),'page','Home nav current-page state');
+    assert.equal(await page.locator('main > .page-body').count(),1,'Page content should render immediately in a single region');
+    assert.equal(await nav.getByRole('button',{name:'Home'}).evaluate(el=>getComputedStyle(el).transitionDuration),'0s','No navigation transition animation');
+    console.log('PASS '+name+' personalized header, instant navigation and keyboard skip link');
     assert.equal(await page.locator('.hero-image').evaluate(img=>img.complete&&img.naturalWidth>0),true,'Hero photo failed to load');
     const portrait=await page.locator('.hero-portrait').boundingBox();
     const title=await page.locator('.hero-text h1').boundingBox();
