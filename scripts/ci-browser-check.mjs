@@ -40,7 +40,8 @@ try{
     const nav=page.getByRole('navigation',{name:'Main navigation'});
     assert.equal(await nav.getByRole('button',{name:'Home'}).getAttribute('aria-current'),'page','Home nav current-page state');
     assert.equal(await page.locator('main > .page-body').count(),1,'Page content should render immediately in a single region');
-    assert.equal(await nav.getByRole('button',{name:'Home'}).evaluate(el=>getComputedStyle(el).transitionDuration),'0s','No navigation transition animation');
+    const navTransition=await nav.getByRole('button',{name:'Home'}).evaluate(el=>Number.parseFloat(getComputedStyle(el).transitionDuration));
+    assert.ok(navTransition<=0.0001,'Navigation must not have a perceptible transition (reduced-motion CSS uses 0.01ms)');
     console.log('PASS '+name+' personalized header, instant navigation and keyboard skip link');
     assert.equal(await page.locator('.hero-image').evaluate(img=>img.complete&&img.naturalWidth>0),true,'Hero photo failed to load');
     const portrait=await page.locator('.hero-portrait').boundingBox();
