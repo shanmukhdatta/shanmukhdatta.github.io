@@ -37,3 +37,10 @@
 - Maintain focus and keyboard navigation, contrast, labels, `prefers-reduced-motion`, and responsive image usage.
 - Semantic project lifecycle labels (built, in development, planned, research in progress, contributions). Avoid false completion/publication claims.
 - Admin OTP and database are **Phase 3**, not included in the current frontend; never say they are live.
+
+## October 2026 interface refinement (design preserved)
+- Keep the exact four-box navigation, grid-paper backgrounds, diagonal mosaic, photo-right hero (including narrow screens), colored project papers, green experience blackboard and traffic-light footer.
+- Use the personalized portfolio masthead `SHANMUKH DATTA / PORTFOLIO` instead of the generic notebook title.
+- Improve reading comfort, keyboard access and mobile spacing while retaining existing content and the original visual language; do not change the CMS/authentication or invent portfolio data.
+- Page switches, experience slides, cards and project dialogs update immediately, **without transition animations**. The existing multilingual intro may continue cycling greeting words but without animated crossfades.
+- Validate at desktop, mobile and compact-mobile sizes in production Chromium CI; keep the intro-left/portrait-right layout at every supported width.
