@@ -1,4 +1,4 @@
-# Student's Blackboard — Portfolio (Phases 2 + 3)
+# Student's Blackboard — The Living Notebook
 
 A notebook/chalkboard-inspired student portfolio for **Boda Shanmukh Datta**. Its appearance follows the user's approved design, including a multilingual introduction, strong black geometric outlines, colored rectangular nav, diagonal work links, and a real cropped photo positioned **to the right of the Home introduction even on mobile**.
 
@@ -13,7 +13,7 @@ A notebook/chalkboard-inspired student portfolio for **Boda Shanmukh Datta**. It
 
 ## Phase 3: private content management system
 
-The code now includes a **private `/control-center`** to update project/research cards, blog entries, gallery, experience, credentials, skills, roadmap, profile and résumé links without editing code. It uses a **real Postgres database, one-admin email OTP, short-lived codes and server-side cookies** when configured. Drafts stay private, published records appear on the public site, and hidden items can be restored. The user-approved public layout is not redesigned.
+The code now includes a **private `/control-center`** to update project/research cards, blog entries, gallery, experience, credentials, skills, roadmap, profile and résumé links without editing code. It uses a **real Postgres database, one-admin email OTP, short-lived codes and server-side cookies** when configured. Drafts stay private, published records appear on the public site, and hidden items can be restored. The public interface follows the approved Living Notebook update.
 
 You **must** configure the database and email sender before using the admin interface; the project intentionally includes no sample login, fake OTP or live credentials. Media uploads additionally require a configured Supabase Storage bucket. Detailed setup and security testing steps: **`docs/PHASE3_SETUP.md`**. Current tested/unverified status: **`docs/PHASE3_STATUS.md`**.
 
@@ -21,7 +21,7 @@ This is **source code only**; no GitHub Pages build or deployment workflow is in
 
 ## Preview without installing packages
 
-Open `preview.html` in a browser for an interactive **offline design preview** (Home, Work, Blogs and About), or inspect `docs/previews/desktop-preview.png` and `docs/previews/mobile-preview.png`. This is a snapshot companion to the actual React source, not proof that the Next.js production build works.
+Open `preview.html` for screenshots of the production application (Home, Work, Blogs, About and Bujji). Run the app locally for interactive motion and chat. See `docs/LIVING_NOTEBOOK.md` for the new features, Groq setup, portrait replacement and current verification limits.
 
 ## Run locally
 

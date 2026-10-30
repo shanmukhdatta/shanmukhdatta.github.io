@@ -9,7 +9,7 @@ import { chromium } from 'playwright';
  */
 const host='127.0.0.1', port=3181, origin=`http://${host}:${port}`;
 const server=spawn(process.execPath,['node_modules/next/dist/bin/next','start','--hostname',host,'--port',String(port)],{
-  env:{...process.env,DATABASE_URL:'',ADMIN_EMAIL:'',OTP_PEPPER:'',RESEND_API_KEY:'',OTP_FROM_EMAIL:'',SUPABASE_SERVICE_ROLE_KEY:''},
+  env:{...process.env,DATABASE_URL:'',ADMIN_EMAIL:'',OTP_PEPPER:'',RESEND_API_KEY:'',OTP_FROM_EMAIL:'',SUPABASE_SERVICE_ROLE_KEY:'',GROQ_API_KEY:'',UPSTASH_REDIS_REST_URL:'',UPSTASH_REDIS_REST_TOKEN:''},
   stdio:['ignore','pipe','pipe']
 });
 let output='', browser;
@@ -23,7 +23,7 @@ try{
   }
   assert.ok(ready,'Next.js not ready: '+output);
   browser=await chromium.launch({headless:true});
-  for(const [name,width,height] of [['desktop',1280,900],['mobile',390,844]]){
+  for(const [name,width,height] of [['desktop',1440,1000],['tablet',768,1024],['mobile',390,844],['small-mobile',360,800]]){
     const context=await browser.newContext({viewport:{width,height},reducedMotion:'reduce'});
     const page=await context.newPage();const exceptions=[];
     page.on('pageerror',error=>exceptions.push(error.message));
@@ -41,6 +41,19 @@ try{
     assert.ok(Math.abs(portrait.y-hero.y)<3,'Hero portrait must begin at the hero top, not below intro');
     assert.ok(!(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2)),'Horizontal overflow on '+name);
     console.log('PASS '+name+' portrait beside intro and no horizontal overflow');
+
+    assert.equal(await page.getByRole('button',{name:'Automatic rotation disabled for reduced motion'}).isDisabled(),true);
+    await page.getByRole('button',{name:'Next portrait',exact:true}).click();
+    await page.getByAltText('Portrait of Shanmukh with the Taj Mahal in the background').waitFor({state:'visible'});
+    assert.equal(await page.locator('.hero-image').evaluate(img=>img.complete&&img.naturalWidth>0),true);
+    await page.getByRole('button',{name:/Ask Bujji/}).click();
+    const chat=page.getByRole('dialog',{name:'Meet Bujji.'});await chat.waitFor({state:'visible'});
+    const chatBox=await chat.boundingBox();assert.ok(chatBox.x>=0&&chatBox.x+chatBox.width<=width,'Chat must fit viewport');
+    await page.getByRole('button',{name:'Show me the research ↗',exact:true}).click();
+    await page.getByText(/The research notebook includes:/).waitFor({state:'visible'});
+    await page.keyboard.press('Escape');await chat.waitFor({state:'hidden'});
+    assert.ok(await page.getByRole('button',{name:/Ask Bujji/}).evaluate(el=>el===document.activeElement));
+    console.log('PASS '+name+' reduced-motion reel, Bujji reply, dialog fit and Escape focus restoration');
 
     const cv=page.getByRole('link',{name:/download cv/i});
     assert.match(await cv.getAttribute('href')||'',/\.pdf$/i,'Resume download link');

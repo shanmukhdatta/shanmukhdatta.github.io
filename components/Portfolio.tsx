@@ -1,7 +1,12 @@
 'use client';
 
-import { createContext, useContext, useEffect, useRef, useState } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { AnimatePresence, MotionConfig, motion, useReducedMotion } from 'motion/react';
+import dynamic from 'next/dynamic';
+import PortraitReel from './PortraitReel';
+import { FeaturedWorkbench, NotebookPage, NotebookSketch } from './NotebookDetails';
+import './living-notebook.css';
+const Bujji = dynamic(() => import('./Bujji'));
 import { defaultPortfolio, type PortfolioData } from '@/lib/cms-schema';
 import { type WorkCategory, type WorkItem } from '@/content/work';
 const ContentContext = createContext<PortfolioData>(defaultPortfolio());
@@ -75,8 +80,8 @@ function Intro({enter}:{enter:()=>void}){
  </section>;
 }
 
-function Home({navigate,openWork}:{navigate:(page:Page)=>void;openWork:(category:Filter)=>void}){
- const {profile,experiences,achievements}=useContent();
+function Home({navigate,openWork,onSelect}:{navigate:(page:Page)=>void;openWork:(category:Filter)=>void;onSelect:(item:WorkItem)=>void}){
+ const {profile,experiences,achievements,workItems}=useContent();
  const [experienceIndex,setExperienceIndex]=useState(0);
  const experience=experiences[experienceIndex] || {role:'',organization:'',description:'',period:'',kind:'Internship' as const};
  const reduced=useReducedMotion();
@@ -89,10 +94,14 @@ function Home({navigate,openWork}:{navigate:(page:Page)=>void;openWork:(category
     <div className="hero-actions"><a className="outline-action primary" href={profile.resume} target="_blank" rel="noopener noreferrer">VIEW CV ↗</a><a className="outline-action" href={profile.resume} download="Shanmukh_Datta_Resume.pdf">DOWNLOAD CV ↓</a></div>
     <span className="scribble hero-hint">↓ take a look at my work</span>
    </div>
-   <div className="hero-portrait"><img src={profile.portrait} alt="Shanmukh standing in front of an ornate building" className="hero-image content-image-fill"/>
-    <span className="portrait-note scribble">that's me ↑</span>
-   </div>
+   <PortraitReel portrait={profile.portrait}/>
   </section>
+  <div className="notebook-index" aria-label="Notebook shortcuts">
+   <a href="#workbench"><span>01 / WORK</span><small>Ideas in practice</small><b aria-hidden="true">↗</b></a>
+   <a href="#experience"><span>02 / EXPERIENCE</span><small>Learning by doing</small><b aria-hidden="true">↘</b></a>
+   <button onClick={()=>navigate('blogs')}><span>03 / NOTES</span><small>Thoughts & scribbles</small><b aria-hidden="true">↗</b></button>
+   <button onClick={()=>navigate('about')}><span>04 / ABOUT</span><small>Beyond the code</small><b aria-hidden="true">↗</b></button>
+  </div>
   <section className="paper-section notebook-grid" aria-labelledby="inside-heading">
    <div className="section-heading"><h2 id="inside-heading">Inside my notebook.</h2><span className="scribble">✎ explore</span></div>
    <div className="mosaic">
@@ -105,7 +114,8 @@ function Home({navigate,openWork}:{navigate:(page:Page)=>void;openWork:(category
    </div>
    <div className="quick-links"><button onClick={()=>navigate('work')}>WORK ↗</button><button onClick={()=>navigate('blogs')}>BLOGS ↗</button><button onClick={()=>navigate('about')}>ABOUT ↗</button></div>
   </section>
-  <section className="blackboard" aria-label="Internships and work experience slideshow">
+  <FeaturedWorkbench items={workItems} onSelect={onSelect} viewAll={()=>openWork('all')}/>
+  <section className="blackboard" id="experience" aria-label="Internships and work experience slideshow">
    <span className="eyebrow board-eyebrow">CHALKBOARD / EXPERIENCE LOG</span><h2 className="scribble">Where I've been learning & working ✳</h2>
    <div className="experience-card" aria-live="polite" aria-atomic="true">
     <AnimatePresence mode="wait">
@@ -125,13 +135,15 @@ function Home({navigate,openWork}:{navigate:(page:Page)=>void;openWork:(category
 
 function Work({selectedFilter,setSelectedFilter,onSelect}:{selectedFilter:Filter;setSelectedFilter:(f:Filter)=>void;onSelect:(item:WorkItem)=>void}){
  const {workItems}=useContent();
+ const reduced=useReducedMotion();
  const [researchStatus,setResearchStatus]=useState<'ongoing'|'published'>('ongoing');
  const filtered=workItems.filter(w=>(selectedFilter==='all'||w.category===selectedFilter) && (w.category!=='research'||selectedFilter==='all'||w.publicationStatus===researchStatus));
  return <section className="paper-section notebook-grid content-page" aria-labelledby="work-heading">
   <div className="eyebrow">02 / ASSIGNMENTS, EXPERIMENTS & IDEAS</div><h1 id="work-heading" className="page-title">Things I made<span className="red-dot">.</span></h1><p className="scribble section-subtitle">Organized like subject folders ↘</p>
   <div className="filter-row" role="group" aria-label="Filter work by category">{categories.map(cat=><button key={cat.id} aria-pressed={selectedFilter===cat.id} onClick={()=>setSelectedFilter(cat.id)}>{cat.label}</button>)}</div>
   {selectedFilter==='research'&&<div className="filter-row research-filters" role="group" aria-label="Research publication status"><button aria-pressed={researchStatus==='ongoing'} onClick={()=>setResearchStatus('ongoing')}>✎ Ongoing</button><button aria-pressed={researchStatus==='published'} onClick={()=>setResearchStatus('published')}>✓ Published</button></div>}
-  {filtered.length>0?<div className="work-grid">{filtered.map((item,i)=><motion.button key={item.id} layout className={`work-paper paper-color-${i%4}`} onClick={()=>onSelect(item)} aria-label={`Read details about ${item.name}`} whileHover={{y:-3}} whileTap={{scale:0.99}}>
+  <p className="results-count" role="status">{filtered.length} {filtered.length===1?'entry':'entries'} in this notebook</p>
+  {filtered.length>0?<div className="work-grid">{filtered.map((item)=><motion.button key={item.id} layout={!reduced} className={`work-paper paper-color-${[...item.id].reduce((sum,c)=>sum+c.charCodeAt(0),0)%4}`} onClick={()=>onSelect(item)} aria-label={`Read details about ${item.name}`} initial={{opacity:0}} animate={{opacity:1}} whileHover={reduced?undefined:{y:-5,rotate:-0.5}} whileTap={reduced?undefined:{scale:0.99}}>
    <span className="paper-tag">{item.category.replace('-',' ')} · {item.status}</span><strong>{item.name} ↗</strong><p>{item.summary}</p><small>{item.stack.join(' · ')}</small>
   </motion.button>)}</div>:<div className="empty-paper"><h2>{selectedFilter==='research'&&researchStatus==='published'?'Published papers archive':'Nothing here yet'}</h2><p>{selectedFilter==='research'&&researchStatus==='published'?'No publications have been verified for this portfolio. When a paper is published, its title, venue, DOI and PDF link can be added here.':'This category will show items when verified content is added.'}</p></div>}
   <p className="fineprint under-cards">Entries distinguish completed, in-development, planned and ongoing research work. Select a paper card for details.</p>
@@ -139,12 +151,12 @@ function Work({selectedFilter,setSelectedFilter,onSelect}:{selectedFilter:Filter
 }
 
 function Blogs(){const {blogPosts}=useContent();return <section className="paper-section notebook-grid content-page" aria-labelledby="blogs-heading"><div className="eyebrow">03 / PAGES FROM THE NOTEBOOK</div><h1 id="blogs-heading" className="page-title">Thoughts & scribbles ✎</h1>
-  {blogPosts.length?<div className="work-grid">{blogPosts.map(post=><article key={post.slug} className="work-paper paper-color-0"><span className="paper-tag">{post.category} · {post.date}</span><h2>{post.title}</h2><p>{post.description}</p><p>{post.body}</p></article>)}</div>:<div className="empty-paper blog-empty"><span className="scribble">dear notebook...</span><h2>Pages are being written.</h2><p>No published blog posts have been provided yet. This space is ready for your articles, engineering notes and research reflections once you choose to publish them.</p></div>}
+  {blogPosts.length?<div className="work-grid">{blogPosts.map(post=><article key={post.slug} className="work-paper paper-color-0"><span className="paper-tag">{post.category} · {post.date}</span><h2>{post.title}</h2><p>{post.description}</p><p>{post.body}</p></article>)}</div>:<div className="empty-paper blog-empty"><span className="scribble">dear notebook...</span><h2>Pages are being written.</h2><p>No posts just yet. This is where engineering notes, experiments, and research reflections will find a home.</p><NotebookSketch/><span className="eyebrow empty-footnote">A blank page is a good place to start.</span></div>}
  </section>}
 
 function About(){const {profile,experiences,skills,credentials,roadmap}=useContent();return <section className="paper-section notebook-grid content-page about-page" aria-labelledby="about-heading">
   <div className="eyebrow">04 / BEYOND THE CODE</div><h1 id="about-heading" className="page-title">A little about me.</h1><p className="about-lead">{profile.introduction} This page is my scrapbook: my photographs, education, experiences, interests and future plans.</p>
-  <section className="about-subsection" aria-labelledby="gallery-heading"><h2 id="gallery-heading" className="scribble">My gallery ↘</h2><div className="gallery-grid">{profile.gallery.map(photo=><figure key={photo.src} className="gallery-photo"><div className="gallery-frame"><img src={photo.src} alt={photo.alt} className="gallery-image content-image-fill"/></div><figcaption>{photo.caption}</figcaption></figure>)}</div></section>
+  <section className="about-subsection" aria-labelledby="gallery-heading"><h2 id="gallery-heading" className="scribble">My gallery ↘</h2><div className="gallery-grid">{profile.gallery.map(photo=><figure key={photo.src} className="gallery-photo"><div className="gallery-frame"><img src={photo.src} alt={photo.alt} className="gallery-image content-image-fill" loading="lazy" decoding="async"/></div><figcaption>{photo.caption}</figcaption></figure>)}</div></section>
   <section className="about-subsection" aria-labelledby="education-heading"><h2 id="education-heading" className="scribble">Education / the classroom</h2><div className="shelf"><div><h3>{profile.school}</h3><p>{profile.degree}<br/>Minor: {profile.minor}<br/>{profile.years}</p></div><div><h3>Subjects in my notebook</h3><p>Data Structures · Operating Systems · Computer Networks · DBMS · OOP · Machine Learning · Probability & Statistics</p></div></div></section>
   <section className="about-subsection" aria-labelledby="experience-heading"><h2 id="experience-heading" className="scribble">Experience / lines from my journey</h2><div className="timeline">{experiences.map(item=><div key={item.role} className="timeline-item"><strong>{item.role}</strong><p>{item.organization}</p><small>{item.period}</small></div>)}</div></section>
   <section className="about-subsection" aria-labelledby="skills-heading"><h2 id="skills-heading" className="scribble">My toolbox / skills</h2><div className="skill-groups">{skills.map(group=><div key={group.group}><h3>{group.group}</h3><div className="tag-row">{group.items.map(item=><span className="tag" key={item}>{item}</span>)}</div></div>)}</div></section>
@@ -162,20 +174,27 @@ export default function Portfolio({initialContent}:{initialContent:PortfolioData
  const [opened,setOpened]=useState<WorkItem|null>(null);
  const reduced=useReducedMotion();
  const mainRef=useRef<HTMLElement|null>(null);
+ const closeWork=useCallback(()=>setOpened(null),[]);
+ // URL fragments make the notebook's four views shareable and Back/Forward usable.
+ useEffect(()=>{
+   const sync=()=>{const hash=location.hash.slice(1);if(['home','work','blogs','about'].includes(hash)){setPage(hash as Page);setIntro(false)}};
+   sync();window.addEventListener('hashchange',sync);return()=>window.removeEventListener('hashchange',sync);
+ },[]);
  useEffect(()=>{try{if(window.sessionStorage.getItem('student-blackboard-intro-seen')==='1')setIntro(false)}catch{}},[]);
  function enter(){setIntro(false);try{window.sessionStorage.setItem('student-blackboard-intro-seen','1')}catch{}}
- function navigate(next:Page){setPage(next);window.scrollTo({top:0,behavior:'auto'});window.setTimeout(()=>mainRef.current?.focus(),0)}
+ function navigate(next:Page){setPage(next);if(location.hash!==`#${next}`)history.pushState(null,'',`#${next}`);window.scrollTo({top:0,behavior:'auto'});window.setTimeout(()=>mainRef.current?.focus(),0)}
  function openWork(next:Filter){setFilter(next);navigate('work')}
- return <ContentContext.Provider value={initialContent}><div className="site-outer"><div className="portfolio-frame"><header className="site-header"><span className="brand">✳ MY NOTEBOOK / PORTFOLIO</span><span className="year">CLASS OF IDEAS · 2026</span><button className="replay" type="button" onClick={()=>setIntro(true)} aria-label="Replay multilingual introduction">↺ INTRO</button></header>
+ return <ContentContext.Provider value={initialContent}><MotionConfig reducedMotion="user"><div className="site-outer living-notebook"><a href="#content" className="skip-link">Skip to notebook</a><div className="portfolio-frame" inert={opened!==null}><header className="site-header"><span className="brand">✳ {initialContent.profile.shortName.toUpperCase()}</span><span className="year">THE LIVING NOTEBOOK · 2026</span><button className="replay" type="button" onClick={()=>setIntro(true)} aria-label="Replay multilingual introduction">↺ INTRO</button></header>
    {intro?<Intro enter={enter}/>:<>
     <nav className="main-nav" aria-label="Main navigation">{(['home','work','blogs','about'] as const).map((id,i)=><button type="button" key={id} className={`nav-box nav-${i}`} aria-current={page===id?'page':undefined} onClick={()=>navigate(id)}>{id==='about'?'About Me':id}</button>)}</nav>
     <main id="content" tabIndex={-1} ref={mainRef}><AnimatePresence mode="wait" initial={false}>
-      <motion.div key={page} initial={{opacity:reduced?1:0,y:reduced?0:8}} animate={{opacity:1,y:0}} exit={{opacity:reduced?1:0,y:reduced?0:-8}} transition={{duration:reduced?0:0.17}}>
-        {page==='home'?<Home navigate={navigate} openWork={openWork}/>:page==='work'?<Work selectedFilter={filter} setSelectedFilter={setFilter} onSelect={setOpened}/>:page==='blogs'?<Blogs/>:<About/>}
+      <motion.div key={page} initial={{opacity:reduced?1:0,y:reduced?0:12}} animate={{opacity:1,y:0}} exit={{opacity:reduced?1:0,y:reduced?0:-6}} transition={{duration:reduced?0:0.22}}>
+        <NotebookPage>{page==='home'?<Home navigate={navigate} openWork={openWork} onSelect={setOpened}/>:page==='work'?<Work selectedFilter={filter} setSelectedFilter={setFilter} onSelect={setOpened}/>:page==='blogs'?<Blogs/>:<About/>}</NotebookPage>
       </motion.div>
     </AnimatePresence></main><Footer/>
    </>}
   </div>
-  <AnimatePresence>{opened&&<ProjectDialog item={opened} onClose={()=>setOpened(null)}/>}</AnimatePresence>
-  </div></ContentContext.Provider>;
+  <AnimatePresence>{opened&&<ProjectDialog item={opened} onClose={closeWork}/>}</AnimatePresence>
+  {!intro&&!opened&&<Bujji navigate={navigate}/>}
+  </div></MotionConfig></ContentContext.Provider>;
 }
