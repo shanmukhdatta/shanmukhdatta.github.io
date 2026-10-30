@@ -35,6 +35,8 @@ jobs:
         run: npm run test:content
       - name: Test CMS rules
         run: npm run test:cms
+      - name: Test Bujji validation, limits, and provider contract
+        run: npm run test:bujji
       - name: Check TypeScript
         run: npm run typecheck
       - name: Build Next.js for production
